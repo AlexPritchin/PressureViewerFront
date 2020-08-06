@@ -21,9 +21,9 @@ class MainProvider with ChangeNotifier {
 
   int _addedFileEntryId;
 
-  List<List<String>> _currentOpenedCSVFileData = [];
+  List<List<dynamic>> _currentOpenedCSVFileData = [];
 
-  List<List<String>> get currentOpenedCSVFileData {
+  List<List<dynamic>> get currentOpenedCSVFileData {
     return [..._currentOpenedCSVFileData];
   }
 
@@ -102,20 +102,29 @@ class MainProvider with ChangeNotifier {
     }
   }
 
-  Future<List<List<String>>> readFromCSVFileEntry({int byId}) async {
+  Future<List<List<dynamic>>> readFromCSVFileEntry({int byId}) async {
     String fileNameForRead = getFileEntry(byId: byId).fileName;
     final fileForReadPath = await getFileInDocumentsFolderPath(fileNameForRead);
     final fileToRead = File(fileForReadPath);
     final fileToReadContentsString = await fileToRead.readAsString();
     List<List<dynamic>> csvFileContentsList = const CsvToListConverter().convert(fileToReadContentsString, eol: '\n');
     csvFileContentsList = csvFileContentsList.skip(1).toList();
-    final neededColumnsArray = [0, 2, 3, 4];
-    csvFileContentsList.forEach((element) {
-      element.removeRange(5, element.length);
-      element.removeAt(1);
-    });
-    //_currentOpenedCSVFileData = csvObject.data;
-    print(csvFileContentsList);
+    // final neededColumnsArray = [0, 2, 3, 4];
+    // csvFileContentsList.forEach((element) {
+    //   element.removeRange(5, element.length);
+    //   element.removeAt(1);
+    // });
+    csvFileContentsList = csvFileContentsList.map((item) {
+      var measurementDateStr = (item[0] as String).replaceAll('/', '-');
+      var measurementDate = DateTime.parse(measurementDateStr);
+      var systoliticPressure = int.tryParse(item[2]);
+      var diastoliticPressure = int.tryParse(item[3]);
+      var pulse = int.tryParse(item[4]);
+      return [measurementDate, systoliticPressure ?? 0, diastoliticPressure ?? 0, pulse ?? 0];
+    }).toList();
+    _currentOpenedCSVFileData = csvFileContentsList;
+    // print(csvFileContentsList[0]);
+    
     return currentOpenedCSVFileData;
   }
 

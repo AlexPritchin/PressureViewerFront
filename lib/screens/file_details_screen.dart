@@ -25,8 +25,8 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
             snapshot.connectionState == ConnectionState.waiting
                 ? Center(child: CircularProgressIndicator())
                 : (snapshot.data != null && snapshot.data.length > 0)
-                    ? Center(child: Text('Ready Error'))
-                    : Center(child: Text('Ready Success')),
+                    ? Center(child: Text('Ready Success'))
+                    : Center(child: Text('Ready Error')),
       ),
     );
   }
