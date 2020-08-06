@@ -18,7 +18,7 @@ class DBAtmPressuresTableFieldsNames {
 
 class ScreensTitles {
   static const String fileListScreenTitle = 'Pressure viewer';
-  static const String fileDetailsScreenTitle = 'Dummy file details';
+  static const String fileDetailsScreenTitle = 'File details';
 }
 
 class ScreensRoutesNames {
