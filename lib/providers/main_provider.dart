@@ -11,6 +11,7 @@ import '../services/data_services/db_service.dart';
 import '../helpers/converter_helper.dart';
 import '../resources/constants.dart';
 import '../models/file_entry.dart';
+import '../models/file_entry_measurement_item.dart';
 
 class MainProvider with ChangeNotifier {
   List<FileEntry> _fileEntries = [];
@@ -21,9 +22,9 @@ class MainProvider with ChangeNotifier {
 
   int _addedFileEntryId;
 
-  List<List<dynamic>> _currentOpenedCSVFileData = [];
+  List<FileEntryMeasurementItem> _currentOpenedCSVFileData = [];
 
-  List<List<dynamic>> get currentOpenedCSVFileData {
+  List<FileEntryMeasurementItem> get currentOpenedCSVFileData {
     return [..._currentOpenedCSVFileData];
   }
 
@@ -52,7 +53,8 @@ class MainProvider with ChangeNotifier {
 
   bool checkFileNameIsInFileEntriesList({String byPath}) {
     final fileNameToCheck = path.basenameWithoutExtension(byPath);
-    final fileEntryIfExistsIndex = _fileEntries.indexWhere((entry) => entry.fileName == fileNameToCheck);
+    final fileEntryIfExistsIndex =
+        _fileEntries.indexWhere((entry) => entry.fileName == fileNameToCheck);
     if (fileEntryIfExistsIndex == -1) {
       return false;
     }
@@ -75,20 +77,25 @@ class MainProvider with ChangeNotifier {
     await fileToAdd.copy(newFilePath);
     _addedFileEntryId = await DBService.insert(
       table: DBTablesNames.fileEntries,
-      data: FileEntry(dateModified: fileToAddModifiedDate, fileName: fileToAddName)
+      data: FileEntry(
+              dateModified: fileToAddModifiedDate, fileName: fileToAddName)
           .toMap(),
     );
     //notifyListeners();
   }
 
   Future<void> deleteFileEntry({int byId}) async {
-    final fileEntryForDelete = _fileEntries.firstWhere((element) => element.id == byId, orElse: () => null);
+    final fileEntryForDelete = _fileEntries
+        .firstWhere((element) => element.id == byId, orElse: () => null);
     if (fileEntryForDelete != null) {
-      final fileInDocumentsFolderForDeletePath = await getFileInDocumentsFolderPath(fileEntryForDelete.fileName);
-      File fileInDocumentsFolderForDelete = File(fileInDocumentsFolderForDeletePath);
+      final fileInDocumentsFolderForDeletePath =
+          await getFileInDocumentsFolderPath(fileEntryForDelete.fileName);
+      File fileInDocumentsFolderForDelete =
+          File(fileInDocumentsFolderForDeletePath);
       if (fileInDocumentsFolderForDelete != null) {
         await fileInDocumentsFolderForDelete.delete();
-        await DBService.deleteFrom(table: DBTablesNames.fileEntries, byId: byId);
+        await DBService.deleteFrom(
+            table: DBTablesNames.fileEntries, byId: byId);
         _fileEntries.removeWhere((element) => element.id == byId);
       }
     }
@@ -102,29 +109,36 @@ class MainProvider with ChangeNotifier {
     }
   }
 
-  Future<List<List<dynamic>>> readFromCSVFileEntry({int byId}) async {
+  Future<List<FileEntryMeasurementItem>> readFromCSVFileEntry(
+      {int byId}) async {
     String fileNameForRead = getFileEntry(byId: byId).fileName;
     final fileForReadPath = await getFileInDocumentsFolderPath(fileNameForRead);
     final fileToRead = File(fileForReadPath);
     final fileToReadContentsString = await fileToRead.readAsString();
-    List<List<dynamic>> csvFileContentsList = const CsvToListConverter().convert(fileToReadContentsString, eol: '\n');
+    List<List<dynamic>> csvFileContentsList =
+        const CsvToListConverter().convert(fileToReadContentsString, eol: '\n');
     csvFileContentsList = csvFileContentsList.skip(1).toList();
     // final neededColumnsArray = [0, 2, 3, 4];
     // csvFileContentsList.forEach((element) {
     //   element.removeRange(5, element.length);
     //   element.removeAt(1);
     // });
-    csvFileContentsList = csvFileContentsList.map((item) {
+    _currentOpenedCSVFileData = csvFileContentsList.map((item) {
       var measurementDateStr = (item[0] as String).replaceAll('/', '-');
       var measurementDate = DateTime.parse(measurementDateStr);
       var systoliticPressure = int.tryParse(item[2]);
       var diastoliticPressure = int.tryParse(item[3]);
-      var pulse = int.tryParse(item[4]);
-      return [measurementDate, systoliticPressure ?? 0, diastoliticPressure ?? 0, pulse ?? 0];
+      var heartRate = int.tryParse(item[4]);
+      return FileEntryMeasurementItem(
+        measurementDate: measurementDate,
+        systoliticPressure: systoliticPressure,
+        diastoliticPressure: diastoliticPressure,
+        heartRate: heartRate,
+      );
+      //return [measurementDate, systoliticPressure ?? 0, diastoliticPressure ?? 0, heartRate ?? 0];
     }).toList();
-    _currentOpenedCSVFileData = csvFileContentsList;
-    // print(csvFileContentsList[0]);
-    
+    //_currentOpenedCSVFileData = csvFileContentsList;
+
     return currentOpenedCSVFileData;
   }
 
@@ -132,8 +146,14 @@ class MainProvider with ChangeNotifier {
     _currentOpenedCSVFileData = [];
   }
 
+  // int getHeartRateForItemInCurrentOpenedCSVFileData({DateTime byDate}) {
+  //   return _currentOpenedCSVFileData.firstWhere((element) => element[0] == byDate)[3];
+  // }
+
   Future<String> getFileInDocumentsFolderPath(String fileName) async {
-    final documentsDirectoryPath = await pathProvider.getApplicationDocumentsDirectory();
-    return path.join(documentsDirectoryPath.path, '$fileName.$csvFileExtension');
+    final documentsDirectoryPath =
+        await pathProvider.getApplicationDocumentsDirectory();
+    return path.join(
+        documentsDirectoryPath.path, '$fileName.$csvFileExtension');
   }
 }

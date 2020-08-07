@@ -12,15 +12,18 @@ class FileDetailsScreen extends StatefulWidget {
 }
 
 class _FileDetailsScreenState extends State<FileDetailsScreen> {
-  
+  // var _currentSelectedDateString = '';
+  // var _currentSelectedSystoliticPressure = '';
+  // var _currentSelectedDiastoliticPressure = '';
+  // var _currentSelectedHeartRate = '';
 
   List<charts.Series<DateSeriesPressure, DateTime>> _createChartSeries(
       MainProvider provider) {
     final systolicPressureData = provider.currentOpenedCSVFileData
-        .map((item) => new DateSeriesPressure(item[0], item[1]))
+        .map((item) => new DateSeriesPressure(item.measurementDate, item.systoliticPressure))
         .toList();
     final diastolicPressureData = provider.currentOpenedCSVFileData
-        .map((item) => new DateSeriesPressure(item[0], item[2]))
+        .map((item) => new DateSeriesPressure(item.measurementDate, item.diastoliticPressure))
         .toList();
     return [
       new charts.Series<DateSeriesPressure, DateTime>(
@@ -40,12 +43,23 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
     ];
   }
 
-  // _chartOnSelectionChanged(charts.SelectionModel model) {
-  //   if (model.selectedDatum.length > 0) {
-  //     print(model.selectedDatum.first.datum.pressureItem);
-  //     print(model.selectedDatum.first.datum.date);
-  //     print(model.selectedDatum[1].datum.pressureItem);
+  // _chartOnSelectionChanged(charts.SelectionModel model, MainProvider provider) {
+  //   if (model.selectedDatum.length <= 0) {
+  //     return;
   //   }
+
+  //   var currentSelectedDate = model.selectedDatum.first.datum.date;
+  //   setState(() {
+  //     _currentSelectedDateString = currentSelectedDate.toString();
+  //     _currentSelectedSystoliticPressure =
+  //         model.selectedDatum.first.datum.pressureItem.toString();
+  //     _currentSelectedDiastoliticPressure =
+  //         model.selectedDatum[1].datum.pressureItem.toString();
+  //     _currentSelectedHeartRate = provider
+  //         .getHeartRateForItemInCurrentOpenedCSVFileData(
+  //             byDate: currentSelectedDate)
+  //         .toString();
+  //   });
   // }
 
   @override
@@ -65,7 +79,10 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
                     ? /*Center(child: Text('Ready Success'))*/
                     Column(
                         children: <Widget>[
-                          Text('File name: ' + mainProvid.getFileEntry(byId: fileEntryToOpenId).fileName),
+                          Text('File name: ' +
+                              mainProvid
+                                  .getFileEntry(byId: fileEntryToOpenId)
+                                  .fileName),
                           Container(
                             height: 250,
                             child: new charts.TimeSeriesChart(
@@ -77,17 +94,39 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
                               // selectionModels: [
                               //   new charts.SelectionModelConfig(
                               //     type: charts.SelectionModelType.info,
-                              //     updatedListener: _chartOnSelectionChanged,
+                              //     updatedListener: (selectionModel) {
+                              //       _chartOnSelectionChanged(
+                              //           selectionModel, mainProvid);
+                              //     },
                               //   )
                               // ],
                             ),
                           ),
-                          // Row(children: <Widget>[
-                          //   Text('Systolitic pressure:')
-                          // ],)
+                          // Text('Date: ' + _currentSelectedDateString),
+                          // Row(
+                          //   children: <Widget>[
+                          //     Text('Systolitic pressure:'),
+                          //     Text(_currentSelectedSystoliticPressure),
+                          //   ],
+                          // ),
+                          // Row(
+                          //   children: <Widget>[
+                          //     Text('Diastolitic pressure:'),
+                          //     Text(_currentSelectedDiastoliticPressure),
+                          //   ],
+                          // ),
+                          // Row(
+                          //   children: <Widget>[
+                          //     Text('Heart rate:'),
+                          //     Text(_currentSelectedHeartRate),
+                          //   ],
+                          // ),
                         ],
                       )
-                    : Center(child: Text('An error occured while parsing the file. Please try again or readd the file to the list. Probably your file is corrupted or has a wrong format.')),
+                    : Center(
+                        child: Text(
+                            'An error occured while parsing the file. Please try again or readd the file to the list. Probably your file is corrupted or has a wrong format.'),
+                      ),
       ),
     );
   }
