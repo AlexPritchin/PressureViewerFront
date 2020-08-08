@@ -5,6 +5,8 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 import '../resources/constants.dart';
 import '../providers/main_provider.dart';
+import '../widgets/file_details/chart_selected_item_details.dart';
+import '../models/file_entry_measurement_item.dart';
 
 class FileDetailsScreen extends StatefulWidget {
   @override
@@ -12,18 +14,17 @@ class FileDetailsScreen extends StatefulWidget {
 }
 
 class _FileDetailsScreenState extends State<FileDetailsScreen> {
-  // var _currentSelectedDateString = '';
-  // var _currentSelectedSystoliticPressure = '';
-  // var _currentSelectedDiastoliticPressure = '';
-  // var _currentSelectedHeartRate = '';
+  var chartDetails = ChartSelectedItemDetails();
 
   List<charts.Series<DateSeriesPressure, DateTime>> _createChartSeries(
       MainProvider provider) {
     final systolicPressureData = provider.currentOpenedCSVFileData
-        .map((item) => new DateSeriesPressure(item.measurementDate, item.systoliticPressure))
+        .map((item) => new DateSeriesPressure(
+            item.measurementDate, item.systoliticPressure))
         .toList();
     final diastolicPressureData = provider.currentOpenedCSVFileData
-        .map((item) => new DateSeriesPressure(item.measurementDate, item.diastoliticPressure))
+        .map((item) => new DateSeriesPressure(
+            item.measurementDate, item.diastoliticPressure))
         .toList();
     return [
       new charts.Series<DateSeriesPressure, DateTime>(
@@ -43,24 +44,27 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
     ];
   }
 
-  // _chartOnSelectionChanged(charts.SelectionModel model, MainProvider provider) {
-  //   if (model.selectedDatum.length <= 0) {
-  //     return;
-  //   }
+  _chartOnSelectionChanged(charts.SelectionModel model, MainProvider provider) {
+    if (model.selectedDatum.length <= 0 ||
+        model.selectedDatum.first == null ||
+        model.selectedDatum.length == 1 ||
+        model.selectedDatum[1] == null) {
+      return;
+    }
 
-  //   var currentSelectedDate = model.selectedDatum.first.datum.date;
-  //   setState(() {
-  //     _currentSelectedDateString = currentSelectedDate.toString();
-  //     _currentSelectedSystoliticPressure =
-  //         model.selectedDatum.first.datum.pressureItem.toString();
-  //     _currentSelectedDiastoliticPressure =
-  //         model.selectedDatum[1].datum.pressureItem.toString();
-  //     _currentSelectedHeartRate = provider
-  //         .getHeartRateForItemInCurrentOpenedCSVFileData(
-  //             byDate: currentSelectedDate)
-  //         .toString();
-  //   });
-  // }
+    var currentSelectedDate = model.selectedDatum.first.datum.date;
+    int selectedHeartRate =
+        provider.getHeartRateForItemInCurrentOpenedCSVFileData(
+            byDate: currentSelectedDate);
+    var currentSelectedMeasurementItem = FileEntryMeasurementItem(
+      measurementDate: currentSelectedDate,
+      systoliticPressure: model.selectedDatum.first.datum.pressureItem,
+      diastoliticPressure: model.selectedDatum[1].datum.pressureItem,
+      heartRate: selectedHeartRate,
+    );
+    chartDetails.currentState
+        .changeDataWithItem(currentSelectedMeasurementItem);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,36 +95,18 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
                               behaviors: [
                                 new charts.PanAndZoomBehavior(),
                               ],
-                              // selectionModels: [
-                              //   new charts.SelectionModelConfig(
-                              //     type: charts.SelectionModelType.info,
-                              //     updatedListener: (selectionModel) {
-                              //       _chartOnSelectionChanged(
-                              //           selectionModel, mainProvid);
-                              //     },
-                              //   )
-                              // ],
+                              selectionModels: [
+                                new charts.SelectionModelConfig(
+                                  type: charts.SelectionModelType.info,
+                                  updatedListener: (selectionModel) {
+                                    _chartOnSelectionChanged(
+                                        selectionModel, mainProvid);
+                                  },
+                                )
+                              ],
                             ),
                           ),
-                          // Text('Date: ' + _currentSelectedDateString),
-                          // Row(
-                          //   children: <Widget>[
-                          //     Text('Systolitic pressure:'),
-                          //     Text(_currentSelectedSystoliticPressure),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   children: <Widget>[
-                          //     Text('Diastolitic pressure:'),
-                          //     Text(_currentSelectedDiastoliticPressure),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   children: <Widget>[
-                          //     Text('Heart rate:'),
-                          //     Text(_currentSelectedHeartRate),
-                          //   ],
-                          // ),
+                          chartDetails,
                         ],
                       )
                     : Center(

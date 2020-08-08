@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:intl/intl.dart';
 
-import '../resources/constants.dart';
-import '../models/file_entry.dart';
-import '../providers/main_provider.dart';
+import '../../resources/constants.dart';
+import '../../models/file_entry.dart';
+import '../../providers/main_provider.dart';
 
 class FileListItem extends StatelessWidget {
   final int id;

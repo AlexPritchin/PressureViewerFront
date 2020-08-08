@@ -146,9 +146,10 @@ class MainProvider with ChangeNotifier {
     _currentOpenedCSVFileData = [];
   }
 
-  // int getHeartRateForItemInCurrentOpenedCSVFileData({DateTime byDate}) {
-  //   return _currentOpenedCSVFileData.firstWhere((element) => element[0] == byDate)[3];
-  // }
+  int getHeartRateForItemInCurrentOpenedCSVFileData({DateTime byDate}) {
+    var measurementItemForDate = _currentOpenedCSVFileData.firstWhere((element) => element.measurementDate == byDate);
+    return measurementItemForDate.heartRate;
+  }
 
   Future<String> getFileInDocumentsFolderPath(String fileName) async {
     final documentsDirectoryPath =

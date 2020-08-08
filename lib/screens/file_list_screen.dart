@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 
 import '../resources/constants.dart';
 import '../providers/main_provider.dart';
-import '../widgets/file_list_item.dart';
-import '../widgets/file_list_dropdown_menu_item.dart';
+import '../widgets/file_list/file_list_item.dart';
+import '../widgets/file_list/file_list_dropdown_menu_item.dart';
 
 class FileListScreen extends StatefulWidget {
   bool isFileBeingAdded = false;

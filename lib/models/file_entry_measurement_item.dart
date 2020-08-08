@@ -6,7 +6,7 @@ class FileEntryMeasurementItem {
 
   FileEntryMeasurementItem({this.measurementDate, this.systoliticPressure, this.diastoliticPressure, this.heartRate});
 
-  String get dateString => measurementDate.toString();
+  String get measurementDateString => measurementDate.toString();
   String get systoliticPressureString => systoliticPressure.toString();
   String get diastoliticPressureString => diastoliticPressure.toString();
   String get heartRateString => heartRate.toString();
