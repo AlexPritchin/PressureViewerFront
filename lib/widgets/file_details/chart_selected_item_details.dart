@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/file_entry_measurement_item.dart';
+import '../../resources/constants.dart';
 
 class ChartSelectedItemDetails extends StatefulWidget {
   _ChartSelectedItemDetailsState currentState;
@@ -36,7 +37,7 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Text(
-            'Date: ' + _currentSelectedDateString,
+             FileDetailsChartDetailsTitles.dateTitle + _currentSelectedDateString,
             style: textStyleForThisWidget,
           ),
           Padding(
@@ -46,7 +47,7 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    'Systolitic pressure:',
+                    FileDetailsChartDetailsTitles.systoliticPressureTitle,
                     style: textStyleForThisWidget,
                   ),
                 ),
@@ -66,7 +67,7 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    'Diastolitic pressure:',
+                    FileDetailsChartDetailsTitles.diastoliticPressureTitle,
                     style: textStyleForThisWidget,
                   ),
                 ),
@@ -86,7 +87,7 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    'Heart rate:',
+                    FileDetailsChartDetailsTitles.heartRateTitle,
                     style: textStyleForThisWidget,
                   ),
                 ),

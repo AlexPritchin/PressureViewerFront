@@ -89,7 +89,7 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
                               bottom: 10.0,
                             ),
                             child: Text(
-                              'File name: ' +
+                              fileDetailsFileNameTitle +
                                   mainProvid
                                       .getFileEntry(byId: fileEntryToOpenId)
                                       .fileName,
@@ -136,8 +136,7 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
                         ],
                       )
                     : Center(
-                        child: Text(
-                            'An error occured while parsing the file. Please try again or readd the file to the list. Probably your file is corrupted or has a wrong format.'),
+                        child: Text(Errors.fileDetailsParsingError),
                       ),
       ),
     );

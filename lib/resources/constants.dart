@@ -42,3 +42,16 @@ String sortOrderTypeToString(SortOrderType sortOrder) {
       return 'DESC';
   }
 }
+
+class Errors {
+  static const String fileDetailsParsingError = 'An error occured while parsing the file. Please try again or readd the file to the list. Probably your file is corrupted or has a wrong format.';
+}
+
+const String fileDetailsFileNameTitle = 'File name: ';
+
+class FileDetailsChartDetailsTitles {
+  static const String dateTitle = 'Date: ';
+  static const String systoliticPressureTitle = 'Systolitic pressure:';
+  static const String diastoliticPressureTitle = 'Diastolitic pressure:';
+  static const String heartRateTitle = 'Heart rate:';
+}
