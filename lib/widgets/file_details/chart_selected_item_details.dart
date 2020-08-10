@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pressure_viewer/widgets/file_details/chart_selected_item_details_measurement_item.dart';
 
 import '../../models/file_entry_measurement_item.dart';
 import '../../resources/constants.dart';
+import 'chart_selected_item_details_measurement_item.dart';
 
 class ChartSelectedItemDetails extends StatefulWidget {
   _ChartSelectedItemDetailsState currentState;
@@ -12,6 +14,7 @@ class ChartSelectedItemDetails extends StatefulWidget {
 }
 
 class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
+  final textStyleForThisWidget = TextStyle(fontSize: 16);
   var _currentSelectedDateString = '';
   var _currentSelectedSystoliticPressure = '';
   var _currentSelectedDiastoliticPressure = '';
@@ -30,75 +33,30 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final textStyleForThisWidget = TextStyle(fontSize: 16);
     widget.currentState = this;
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Text(
-             FileDetailsChartDetailsTitles.dateTitle + _currentSelectedDateString,
+            FileDetailsChartDetailsTitles.dateTitle +
+                _currentSelectedDateString,
             style: textStyleForThisWidget,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    FileDetailsChartDetailsTitles.systoliticPressureTitle,
-                    style: textStyleForThisWidget,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    _currentSelectedSystoliticPressure,
-                    style: textStyleForThisWidget,
-                  ),
-                ),
-              ],
-            ),
+          ChartSelectedItemDetailsMeasurementItem(
+            currentTextStyle: textStyleForThisWidget,
+            itemLabel: FileDetailsChartDetailsTitles.systoliticPressureTitle,
+            itemValue: _currentSelectedSystoliticPressure,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    FileDetailsChartDetailsTitles.diastoliticPressureTitle,
-                    style: textStyleForThisWidget,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    _currentSelectedDiastoliticPressure,
-                    style: textStyleForThisWidget,
-                  ),
-                ),
-              ],
-            ),
+          ChartSelectedItemDetailsMeasurementItem(
+            currentTextStyle: textStyleForThisWidget,
+            itemLabel: FileDetailsChartDetailsTitles.diastoliticPressureTitle,
+            itemValue: _currentSelectedDiastoliticPressure,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    FileDetailsChartDetailsTitles.heartRateTitle,
-                    style: textStyleForThisWidget,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    _currentSelectedHeartRate,
-                    style: textStyleForThisWidget,
-                  ),
-                ),
-              ],
-            ),
+          ChartSelectedItemDetailsMeasurementItem(
+            currentTextStyle: textStyleForThisWidget,
+            itemLabel: FileDetailsChartDetailsTitles.heartRateTitle,
+            itemValue: _currentSelectedHeartRate,
           ),
         ],
       ),
