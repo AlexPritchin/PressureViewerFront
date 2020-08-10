@@ -19,22 +19,22 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
   List<charts.Series<DateSeriesPressure, DateTime>> _createChartSeries(
       MainProvider provider) {
     final systolicPressureData = provider.currentOpenedCSVFileData
-        .map((item) => new DateSeriesPressure(
-            item.measurementDate, item.systoliticPressure))
+        .map((item) =>
+            DateSeriesPressure(item.measurementDate, item.systoliticPressure))
         .toList();
     final diastolicPressureData = provider.currentOpenedCSVFileData
-        .map((item) => new DateSeriesPressure(
-            item.measurementDate, item.diastoliticPressure))
+        .map((item) =>
+            DateSeriesPressure(item.measurementDate, item.diastoliticPressure))
         .toList();
     return [
-      new charts.Series<DateSeriesPressure, DateTime>(
+      charts.Series<DateSeriesPressure, DateTime>(
         id: 'Systolic',
         colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
         domainFn: (DateSeriesPressure pressure, _) => pressure.date,
         measureFn: (DateSeriesPressure pressure, _) => pressure.pressureItem,
         data: systolicPressureData,
       ),
-      new charts.Series<DateSeriesPressure, DateTime>(
+      charts.Series<DateSeriesPressure, DateTime>(
         id: 'Diastolic',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (DateSeriesPressure pressure, _) => pressure.date,
@@ -83,20 +83,46 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
                     ? /*Center(child: Text('Ready Success'))*/
                     Column(
                         children: <Widget>[
-                          Text('File name: ' +
-                              mainProvid
-                                  .getFileEntry(byId: fileEntryToOpenId)
-                                  .fileName),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 20.0,
+                              bottom: 10.0,
+                            ),
+                            child: Text(
+                              'File name: ' +
+                                  mainProvid
+                                      .getFileEntry(byId: fileEntryToOpenId)
+                                      .fileName,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .copyWith(fontSize: 17),
+                            ),
+                          ),
                           Container(
                             height: 250,
-                            child: new charts.TimeSeriesChart(
+                            child: charts.TimeSeriesChart(
                               _createChartSeries(mainProvid),
                               animate: true,
+                              domainAxis: charts.DateTimeAxisSpec(
+                                renderSpec: charts.SmallTickRendererSpec(
+                                  labelStyle: charts.TextStyleSpec(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              primaryMeasureAxis: charts.NumericAxisSpec(
+                                renderSpec: charts.GridlineRendererSpec(
+                                  labelStyle: charts.TextStyleSpec(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
                               behaviors: [
-                                new charts.PanAndZoomBehavior(),
+                                charts.PanAndZoomBehavior(),
                               ],
                               selectionModels: [
-                                new charts.SelectionModelConfig(
+                                charts.SelectionModelConfig(
                                   type: charts.SelectionModelType.info,
                                   updatedListener: (selectionModel) {
                                     _chartOnSelectionChanged(

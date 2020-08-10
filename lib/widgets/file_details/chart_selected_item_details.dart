@@ -6,7 +6,8 @@ class ChartSelectedItemDetails extends StatefulWidget {
   _ChartSelectedItemDetailsState currentState;
 
   @override
-  _ChartSelectedItemDetailsState createState() => _ChartSelectedItemDetailsState();
+  _ChartSelectedItemDetailsState createState() =>
+      _ChartSelectedItemDetailsState();
 }
 
 class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
@@ -18,37 +19,88 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
   changeDataWithItem(FileEntryMeasurementItem measurementItem) {
     setState(() {
       _currentSelectedDateString = measurementItem.measurementDateString;
-      _currentSelectedSystoliticPressure = measurementItem.systoliticPressureString;
-      _currentSelectedDiastoliticPressure = measurementItem.diastoliticPressureString;
+      _currentSelectedSystoliticPressure =
+          measurementItem.systoliticPressureString;
+      _currentSelectedDiastoliticPressure =
+          measurementItem.diastoliticPressureString;
       _currentSelectedHeartRate = measurementItem.heartRateString;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final textStyleForThisWidget = TextStyle(fontSize: 16);
     widget.currentState = this;
-    return Column(
-      children: <Widget>[
-        Text('Date: ' + _currentSelectedDateString),
-        Row(
-          children: <Widget>[
-            Text('Systolitic pressure:'),
-            Text(_currentSelectedSystoliticPressure),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            Text('Diastolitic pressure:'),
-            Text(_currentSelectedDiastoliticPressure),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            Text('Heart rate:'),
-            Text(_currentSelectedHeartRate),
-          ],
-        ),
-      ],
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text(
+            'Date: ' + _currentSelectedDateString,
+            style: textStyleForThisWidget,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    'Systolitic pressure:',
+                    style: textStyleForThisWidget,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    _currentSelectedSystoliticPressure,
+                    style: textStyleForThisWidget,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    'Diastolitic pressure:',
+                    style: textStyleForThisWidget,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    _currentSelectedDiastoliticPressure,
+                    style: textStyleForThisWidget,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    'Heart rate:',
+                    style: textStyleForThisWidget,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    _currentSelectedHeartRate,
+                    style: textStyleForThisWidget,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
