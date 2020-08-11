@@ -7,6 +7,7 @@ import 'chart_selected_item_details_measurement_item.dart';
 
 class ChartSelectedItemDetails extends StatefulWidget {
   _ChartSelectedItemDetailsState currentState;
+  FileEntryMeasurementItem initialMeasurementItem;
 
   @override
   _ChartSelectedItemDetailsState createState() =>
@@ -34,6 +35,21 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
   @override
   Widget build(BuildContext context) {
     widget.currentState = this;
+    if (widget.initialMeasurementItem != null) {
+      if (_currentSelectedDateString == '')
+        _currentSelectedDateString =
+            widget.initialMeasurementItem.measurementDateString;
+      if (_currentSelectedSystoliticPressure == '')
+        _currentSelectedSystoliticPressure =
+            widget.initialMeasurementItem.systoliticPressureString;
+      if (_currentSelectedDiastoliticPressure == '')
+        _currentSelectedDiastoliticPressure =
+            widget.initialMeasurementItem.diastoliticPressureString;
+      if (_currentSelectedHeartRate == '')
+        _currentSelectedHeartRate =
+            widget.initialMeasurementItem.heartRateString;
+      widget.initialMeasurementItem = null;
+    }
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

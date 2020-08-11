@@ -15,6 +15,7 @@ class FileDetailsScreen extends StatefulWidget {
 
 class _FileDetailsScreenState extends State<FileDetailsScreen> {
   var chartDetails = ChartSelectedItemDetails();
+  var isDisposing = false;
 
   List<charts.Series<DateSeriesPressure, DateTime>> _createChartSeries(
       MainProvider provider) {
@@ -45,6 +46,9 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
   }
 
   _chartOnSelectionChanged(charts.SelectionModel model, MainProvider provider) {
+    if (isDisposing) {
+      return;
+    }
     if (model.selectedDatum.length <= 0 ||
         model.selectedDatum.first == null ||
         model.selectedDatum.length == 1 ||
@@ -62,82 +66,104 @@ class _FileDetailsScreenState extends State<FileDetailsScreen> {
       diastoliticPressure: model.selectedDatum[1].datum.pressureItem,
       heartRate: selectedHeartRate,
     );
+
+    if (chartDetails.currentState == null) {
+      chartDetails.initialMeasurementItem = currentSelectedMeasurementItem;
+      return;
+    }
     chartDetails.currentState
         .changeDataWithItem(currentSelectedMeasurementItem);
+  }
+
+  Future<bool> setWidgetDisposing() async {
+    isDisposing = true;
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     final fileEntryToOpenId = ModalRoute.of(context).settings.arguments;
     final mainProvid = Provider.of<MainProvider>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(ScreensTitles.fileDetailsScreenTitle),
-      ),
-      body: FutureBuilder(
-        future: mainProvid.readFromCSVFileEntry(byId: fileEntryToOpenId),
-        builder: (ctx, snapshot) =>
-            snapshot.connectionState == ConnectionState.waiting
-                ? Center(child: CircularProgressIndicator())
-                : (snapshot.data != null && snapshot.data.length > 0)
-                    ? /*Center(child: Text('Ready Success'))*/
-                    Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 20.0,
-                              bottom: 10.0,
+    return WillPopScope(
+      onWillPop: setWidgetDisposing,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(ScreensTitles.fileDetailsScreenTitle),
+        ),
+        body: FutureBuilder(
+          future: mainProvid.readFromCSVFileEntry(byId: fileEntryToOpenId),
+          builder: (ctx, snapshot) =>
+              snapshot.connectionState == ConnectionState.waiting
+                  ? Center(child: CircularProgressIndicator())
+                  : (snapshot.data != null && snapshot.data.length > 0)
+                      ? Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 20.0,
+                                bottom: 10.0,
+                              ),
+                              child: Text(
+                                fileDetailsFileNameTitle +
+                                    mainProvid
+                                        .getFileEntry(byId: fileEntryToOpenId)
+                                        .fileName,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    .copyWith(fontSize: 17),
+                              ),
                             ),
-                            child: Text(
-                              fileDetailsFileNameTitle +
-                                  mainProvid
-                                      .getFileEntry(byId: fileEntryToOpenId)
-                                      .fileName,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  .copyWith(fontSize: 17),
-                            ),
-                          ),
-                          Container(
-                            height: 250,
-                            child: charts.TimeSeriesChart(
-                              _createChartSeries(mainProvid),
-                              animate: true,
-                              domainAxis: charts.DateTimeAxisSpec(
-                                renderSpec: charts.SmallTickRendererSpec(
-                                  labelStyle: charts.TextStyleSpec(
-                                    fontSize: 14,
+                            Container(
+                              height: 250,
+                              child: charts.TimeSeriesChart(
+                                _createChartSeries(mainProvid),
+                                animate: true,
+                                domainAxis: charts.DateTimeAxisSpec(
+                                  renderSpec: charts.SmallTickRendererSpec(
+                                    labelStyle: charts.TextStyleSpec(
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              primaryMeasureAxis: charts.NumericAxisSpec(
-                                renderSpec: charts.GridlineRendererSpec(
-                                  labelStyle: charts.TextStyleSpec(
-                                    fontSize: 14,
+                                primaryMeasureAxis: charts.NumericAxisSpec(
+                                  renderSpec: charts.GridlineRendererSpec(
+                                    labelStyle: charts.TextStyleSpec(
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
+                                behaviors: [
+                                  charts.PanAndZoomBehavior(),
+                                  charts.InitialSelection(selectedDataConfig: [
+                                    charts.SeriesDatumConfig<dynamic>(
+                                        'Systolic',
+                                        mainProvid.currentOpenedCSVFileData.last
+                                            .measurementDate),
+                                    charts.SeriesDatumConfig<dynamic>(
+                                        'Diastolic',
+                                        mainProvid.currentOpenedCSVFileData.last
+                                            .measurementDate),
+                                  ])
+                                ],
+                                selectionModels: [
+                                  charts.SelectionModelConfig(
+                                    type: charts.SelectionModelType.info,
+                                    updatedListener: (selectionModel) {
+                                      _chartOnSelectionChanged(
+                                          selectionModel, mainProvid);
+                                    },
+                                  )
+                                ],
                               ),
-                              behaviors: [
-                                charts.PanAndZoomBehavior(),
-                              ],
-                              selectionModels: [
-                                charts.SelectionModelConfig(
-                                  type: charts.SelectionModelType.info,
-                                  updatedListener: (selectionModel) {
-                                    _chartOnSelectionChanged(
-                                        selectionModel, mainProvid);
-                                  },
-                                )
-                              ],
                             ),
-                          ),
-                          chartDetails,
-                        ],
-                      )
-                    : Center(
-                        child: Text(Errors.fileDetailsParsingError),
-                      ),
+                            chartDetails,
+                          ],
+                        )
+                      : Center(
+                          child: Text(Errors.fileDetailsParsingError),
+                        ),
+        ),
       ),
     );
   }
@@ -149,5 +175,3 @@ class DateSeriesPressure {
 
   DateSeriesPressure(this.date, this.pressureItem);
 }
-
-// Text('${ModalRoute.of(context).settings.arguments}')
