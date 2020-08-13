@@ -81,7 +81,6 @@ class MainProvider with ChangeNotifier {
               dateModified: fileToAddModifiedDate, fileName: fileToAddName)
           .toMap(),
     );
-    //notifyListeners();
   }
 
   Future<void> deleteFileEntry({int byId}) async {
@@ -118,11 +117,6 @@ class MainProvider with ChangeNotifier {
     List<List<dynamic>> csvFileContentsList =
         const CsvToListConverter().convert(fileToReadContentsString, eol: '\n');
     csvFileContentsList = csvFileContentsList.skip(1).toList();
-    // final neededColumnsArray = [0, 2, 3, 4];
-    // csvFileContentsList.forEach((element) {
-    //   element.removeRange(5, element.length);
-    //   element.removeAt(1);
-    // });
     _currentOpenedCSVFileData = csvFileContentsList.map((item) {
       var measurementDateStr = (item[0] as String).replaceAll('/', '-');
       var measurementDate = DateTime.parse(measurementDateStr);
@@ -135,9 +129,7 @@ class MainProvider with ChangeNotifier {
         diastoliticPressure: diastoliticPressure,
         heartRate: heartRate,
       );
-      //return [measurementDate, systoliticPressure ?? 0, diastoliticPressure ?? 0, heartRate ?? 0];
     }).toList();
-    //_currentOpenedCSVFileData = csvFileContentsList;
 
     return currentOpenedCSVFileData;
   }
