@@ -62,4 +62,5 @@ const serverMainUrl = 'http://10.0.2.2:8000';
 
 class WebServerUrls {
   static const String fileEntriesPath = '/file-entries';
+  static const String fileEntriesFullPath = serverMainUrl + fileEntriesPath;
 }
