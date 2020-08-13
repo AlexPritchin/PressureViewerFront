@@ -7,8 +7,8 @@ class DBTablesNames {
 
 class DBFileEntryTableFieldsNames {
   static const String id = 'id';
-  static const String dateModified = 'date_modified';
-  static const String fileName = 'file_name';
+  static const String dateModified = 'dateModified';
+  static const String fileName = 'fileName';
 }
 
 class DBAtmPressuresTableFieldsNames {
@@ -54,4 +54,12 @@ class FileDetailsChartDetailsTitles {
   static const String systoliticPressureTitle = 'Systolitic pressure:';
   static const String diastoliticPressureTitle = 'Diastolitic pressure:';
   static const String heartRateTitle = 'Heart rate:';
+}
+
+const jsonHeader = {"Content-Type": "application/json"};
+
+const serverMainUrl = 'http://10.0.2.2:8000';
+
+class WebServerUrls {
+  static const String fileEntriesPath = '/file-entries';
 }
