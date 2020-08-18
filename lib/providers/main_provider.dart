@@ -81,12 +81,16 @@ class MainProvider with ChangeNotifier {
     }
     final newFilePath = await getFileInDocumentsFolderPath(fileToAddName);
     await fileToAdd.copy(newFilePath);
-    _addedFileEntryId = await DBService.insert(
-      table: DBTablesNames.fileEntries,
-      data: FileEntry(
+    // _addedFileEntryId = await DBService.insert(
+    //   table: DBTablesNames.fileEntries,
+    //   data: FileEntry(
+    //           dateModified: fileToAddModifiedDate, fileName: fileToAddName)
+    //       .toMap(),
+    // );
+    var addedFileEntryMap = await FileEntriesService.addFileEntry(FileEntry(
               dateModified: fileToAddModifiedDate, fileName: fileToAddName)
-          .toMap(),
-    );
+          .toMap());
+    _addedFileEntryId = addedFileEntryMap[DBFileEntryTableFieldsNames.id];
   }
 
   Future<void> deleteFileEntry({int byId}) async {
