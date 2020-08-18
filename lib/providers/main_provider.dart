@@ -7,7 +7,8 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'package:csv/csv.dart';
 
-import '../services/data_services/db_service.dart';
+//import '../services/data_services/db_service.dart';
+import '../services/web_serices/file_entries_service.dart';
 import '../helpers/converter_helper.dart';
 import '../resources/constants.dart';
 import '../models/file_entry.dart';
@@ -20,7 +21,7 @@ class MainProvider with ChangeNotifier {
     return [..._fileEntries];
   }
 
-  int _addedFileEntryId;
+  String _addedFileEntryId;
 
   List<FileEntryMeasurementItem> _currentOpenedCSVFileData = [];
 
@@ -36,18 +37,23 @@ class MainProvider with ChangeNotifier {
     return fileEntryIndex == -1 ? 0 : fileEntryIndex;
   }
 
-  FileEntry getFileEntry({int byId}) {
+  FileEntry getFileEntry({String byId}) {
     return _fileEntries.firstWhere((element) => element.id == byId,
         orElse: () => null);
   }
 
   Future<List<FileEntry>> fetchFileEntries() async {
     _fileEntries = ConverterHelper.getListOfFileEntry(
-      fromListOfMaps: await DBService.selectAllFrom(
-        table: DBTablesNames.fileEntries,
-        sortOrder: sortOrderTypeToString(currentSortOrderFileEntries),
-      ),
+      // fromListOfMaps: await DBService.selectAllFrom(
+      //   table: DBTablesNames.fileEntries,
+      //   sortOrder: sortOrderTypeToString(currentSortOrderFileEntries),
+      // ),
+      fromListOfMaps: await FileEntriesService.getFileEntries(),
     );
+    _fileEntries.sort((itemA, itemB) =>
+        currentSortOrderFileEntries == SortOrderType.Ascending
+            ? itemA.dateModified.compareTo(itemB.dateModified)
+            : -itemA.dateModified.compareTo(itemB.dateModified));
     return fileEntries;
   }
 
@@ -139,7 +145,8 @@ class MainProvider with ChangeNotifier {
   }
 
   int getHeartRateForItemInCurrentOpenedCSVFileData({DateTime byDate}) {
-    var measurementItemForDate = _currentOpenedCSVFileData.firstWhere((element) => element.measurementDate == byDate);
+    var measurementItemForDate = _currentOpenedCSVFileData
+        .firstWhere((element) => element.measurementDate == byDate);
     return measurementItemForDate.heartRate;
   }
 
