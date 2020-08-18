@@ -120,7 +120,7 @@ class MainProvider with ChangeNotifier {
   }
 
   Future<List<FileEntryMeasurementItem>> readFromCSVFileEntry(
-      {int byId}) async {
+      {String byId}) async {
     String fileNameForRead = getFileEntry(byId: byId).fileName;
     final fileForReadPath = await getFileInDocumentsFolderPath(fileNameForRead);
     final fileToRead = File(fileForReadPath);
