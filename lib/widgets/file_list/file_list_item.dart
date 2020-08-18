@@ -8,7 +8,7 @@ import '../../models/file_entry.dart';
 import '../../providers/main_provider.dart';
 
 class FileListItem extends StatelessWidget {
-  final int id;
+  final String id;
   FileEntry fileEntryToShow;
 
   FileListItem({this.id});
