@@ -29,7 +29,7 @@ class FileEntriesService {
 
   static Future<bool> deleteFileEntry({String fileEntryId}) async {
     var response =
-        await http.delete(WebServerUrls.fileEntriesFullPath + '\\$fileEntryId');
+        await http.delete(WebServerUrls.fileEntriesFullPath + '/$fileEntryId');
     return response.statusCode == 200;
   }
 }
