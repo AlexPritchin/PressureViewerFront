@@ -17,16 +17,15 @@ class FileListItem extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Are you sure?'),
-        content: Text(
-            'Do you want to delete file entry from the app? This operation will not delete file from your device.'),
+        title: Text(AlertTitles.areYouSure),
+        content: Text(Messages.confirmDeleteFileMessage),
         actions: <Widget>[
           FlatButton(
-            child: Text('Yes'),
+            child: Text(ButtonsTitles.yes),
             onPressed: () => Navigator.of(ctx).pop(true),
           ),
           FlatButton(
-            child: Text('No'),
+            child: Text(ButtonsTitles.no),
             onPressed: () => Navigator.of(ctx).pop(false),
           ),
         ],
@@ -83,8 +82,9 @@ class FileListItem extends StatelessWidget {
                 Text(path.basenameWithoutExtension(fileEntryToShow.fileName))
               ]),
           onTap: () {
-            Navigator.of(context)
-                .pushNamed(ScreensRoutesNames.fileDetailsScreenRoute, arguments: id);
+            Navigator.of(context).pushNamed(
+                ScreensRoutesNames.fileDetailsScreenRoute,
+                arguments: id);
           },
         ),
       ),

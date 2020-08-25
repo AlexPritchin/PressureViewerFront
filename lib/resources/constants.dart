@@ -44,7 +44,10 @@ String sortOrderTypeToString(SortOrderType sortOrder) {
 }
 
 class Errors {
+  static const String noNetworkError = 'No internet connection available';
+  static const String fileListFileAlreadyExists = 'The file with such name was already added to the list.';
   static const String fileDetailsParsingError = 'An error occured while parsing the file. Please try again or readd the file to the list. Probably your file is corrupted or has a wrong format.';
+  static const String unknownError = 'An error occured. Please try again.';
 }
 
 const String fileDetailsFileNameTitle = 'File name: ';
@@ -63,4 +66,26 @@ const serverMainUrl = 'http://10.0.2.2:8000';
 class WebServerUrls {
   static const String fileEntriesPath = '/file-entries';
   static const String fileEntriesFullPath = serverMainUrl + fileEntriesPath;
+}
+
+class Messages {
+  static const String fileListNoFilesMessage = 'No files found. Press "+" button to add a statistics file.';
+  static const String confirmDeleteFileMessage = 'Do you want to delete file entry from the app? This operation will not delete file from your device.';
+}
+
+class AlertTitles {
+  static const String error = 'Error';
+  static const String areYouSure = 'Are you sure?';
+}
+
+class ButtonsTitles {
+  static const String ok = 'OK';
+  static const String yes = 'Yes';
+  static const String no = 'No';
+}
+
+class DropdownMenuTitles {
+  static const String sort = 'Sort by date';
+  static const String ascending = 'Ascending';
+  static const String descending = 'Descending';
 }
