@@ -24,6 +24,20 @@ class FileListScreen extends StatefulWidget {
 
 class _FileListScreenState extends State<FileListScreen> {
   void pickFile(BuildContext mainContext) async {
+    var networkConnectionExists = await Connectivity().checkConnectivity();
+    if (networkConnectionExists == ConnectivityResult.none) {
+      Scaffold.of(mainContext).showSnackBar(
+        SnackBar(
+          content: Text(
+            Errors.noNetworkError,
+            style: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+        ),
+      );
+      return;
+    }
     final File pickedFile = await FilePicker.getFile(
         type: FileType.custom, allowedExtensions: [csvFileExtension]);
     print(pickedFile.path);
@@ -53,11 +67,23 @@ class _FileListScreenState extends State<FileListScreen> {
     setState(() {
       widget.isFileBeingAdded = true;
     });
-    await Provider.of<MainProvider>(mainContext, listen: false)
+    var isFileAdded = await Provider.of<MainProvider>(mainContext, listen: false)
         .addFile(fileToAdd: pickedFile);
     setState(() {
       widget.isFileBeingAdded = false;
     });
+    if (!isFileAdded) {
+      Scaffold.of(mainContext).showSnackBar(
+          SnackBar(
+            content: Text(
+              Errors.unknownError,
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          ),
+        );
+    }
   }
 
   void sortFileEntries(

@@ -67,7 +67,7 @@ class MainProvider with ChangeNotifier {
     return true;
   }
 
-  Future<void> addFile({File fileToAdd}) async {
+  Future<bool> addFile({File fileToAdd}) async {
     final fileToAddName = path.basenameWithoutExtension(fileToAdd.path);
     DateTime fileToAddModifiedDate;
     try {
@@ -80,7 +80,6 @@ class MainProvider with ChangeNotifier {
       }
     }
     final newFilePath = await getFileInDocumentsFolderPath(fileToAddName);
-    await fileToAdd.copy(newFilePath);
     // _addedFileEntryId = await DBService.insert(
     //   table: DBTablesNames.fileEntries,
     //   data: FileEntry(
@@ -90,7 +89,12 @@ class MainProvider with ChangeNotifier {
     var addedFileEntryMap = await FileEntriesService.addFileEntry(FileEntry(
               dateModified: fileToAddModifiedDate, fileName: fileToAddName)
           .toMap());
+    if (addedFileEntryMap == null) {
+      return false;
+    }
+    await fileToAdd.copy(newFilePath);
     _addedFileEntryId = addedFileEntryMap[DBFileEntryTableFieldsNames.id];
+    return true;
   }
 
   Future<void> deleteFileEntry({String byId}) async {
