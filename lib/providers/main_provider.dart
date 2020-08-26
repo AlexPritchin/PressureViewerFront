@@ -97,7 +97,7 @@ class MainProvider with ChangeNotifier {
     return true;
   }
 
-  Future<void> deleteFileEntry({String byId}) async {
+  Future<bool> deleteFileEntry({String byId}) async {
     final fileEntryForDelete = _fileEntries
         .firstWhere((element) => element.id == byId, orElse: () => null);
     if (fileEntryForDelete != null) {
@@ -106,11 +106,15 @@ class MainProvider with ChangeNotifier {
       File fileInDocumentsFolderForDelete =
           File(fileInDocumentsFolderForDeletePath);
       if (fileInDocumentsFolderForDelete != null) {
-        await fileInDocumentsFolderForDelete.delete();
         // await DBService.deleteFrom(
         //     table: DBTablesNames.fileEntries, byId: byId);
-        await FileEntriesService.deleteFileEntry(fileEntryId: byId);
+        var isFileDeleted = await FileEntriesService.deleteFileEntry(fileEntryId: byId);
+        if (!isFileDeleted) {
+          return false;
+        }
         _fileEntries.removeWhere((element) => element.id == byId);
+        await fileInDocumentsFolderForDelete.delete();
+        return true;
       }
     }
     notifyListeners();

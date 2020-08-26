@@ -13,6 +13,7 @@ import '../resources/constants.dart';
 import '../providers/main_provider.dart';
 import '../widgets/file_list/file_list_item.dart';
 import '../widgets/file_list/file_list_dropdown_menu_item.dart';
+import '../helpers/alerts_helper.dart';
 
 class FileListScreen extends StatefulWidget {
   bool isFileBeingAdded = false;
@@ -26,16 +27,7 @@ class _FileListScreenState extends State<FileListScreen> {
   void pickFile(BuildContext mainContext) async {
     var networkConnectionExists = await Connectivity().checkConnectivity();
     if (networkConnectionExists == ConnectivityResult.none) {
-      Scaffold.of(mainContext).showSnackBar(
-        SnackBar(
-          content: Text(
-            Errors.noNetworkError,
-            style: TextStyle(
-              color: Colors.red,
-            ),
-          ),
-        ),
-      );
+      AlertsHelper.showSnackBarError(mainContext, Errors.noNetworkError);
       return;
     }
     final File pickedFile = await FilePicker.getFile(
@@ -73,16 +65,7 @@ class _FileListScreenState extends State<FileListScreen> {
       widget.isFileBeingAdded = false;
     });
     if (!isFileAdded) {
-      Scaffold.of(mainContext).showSnackBar(
-          SnackBar(
-            content: Text(
-              Errors.unknownError,
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
-          ),
-        );
+      AlertsHelper.showSnackBarError(mainContext, Errors.unknownError);
     }
   }
 

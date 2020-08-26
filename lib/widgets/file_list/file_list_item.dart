@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:intl/intl.dart';
+import 'package:connectivity/connectivity.dart';
 
 import '../../resources/constants.dart';
 import '../../models/file_entry.dart';
 import '../../providers/main_provider.dart';
+import '../../helpers/alerts_helper.dart';
 
 class FileListItem extends StatelessWidget {
   final String id;
@@ -22,7 +24,9 @@ class FileListItem extends StatelessWidget {
         actions: <Widget>[
           FlatButton(
             child: Text(ButtonsTitles.yes),
-            onPressed: () => Navigator.of(ctx).pop(true),
+            onPressed: () {
+              tryDeleteFileEntry(context);
+            },
           ),
           FlatButton(
             child: Text(ButtonsTitles.no),
@@ -31,6 +35,19 @@ class FileListItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  tryDeleteFileEntry(BuildContext context) async {
+    var networkConnectionExists = await Connectivity().checkConnectivity();
+    if (networkConnectionExists == ConnectivityResult.none) {
+      return;
+    }
+    var mainProvid = Provider.of<MainProvider>(context, listen: false);
+    var isFileDeleted = await mainProvid.deleteFileEntry(byId: id);
+    Navigator.of(context).pop(isFileDeleted);
+    if (!isFileDeleted) {
+      AlertsHelper.showSnackBarError(context, Errors.unknownError);
+    }
   }
 
   @override
@@ -59,7 +76,6 @@ class FileListItem extends StatelessWidget {
       ),
       direction: DismissDirection.endToStart,
       confirmDismiss: (_) => showConfirmDeleteDialog(context),
-      onDismissed: (_) => mainProvid.deleteFileEntry(byId: id),
       child: Card(
         elevation: 1,
         margin: const EdgeInsets.symmetric(
