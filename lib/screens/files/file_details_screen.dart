@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-import '../resources/constants.dart';
-import '../providers/main_provider.dart';
-import '../widgets/file_details/chart_selected_item_details.dart';
-import '../models/file_entry_measurement_item.dart';
+import '../../resources/constants.dart';
+import '../../providers/main_provider.dart';
+import '../../widgets/file_details/chart_selected_item_details.dart';
+import '../../models/files/file_entry_measurement_item.dart';
 
 class FileDetailsScreen extends StatefulWidget {
   @override

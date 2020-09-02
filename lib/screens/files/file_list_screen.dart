@@ -9,11 +9,11 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity/connectivity.dart';
 
-import '../resources/constants.dart';
-import '../providers/main_provider.dart';
-import '../widgets/file_list/file_list_item.dart';
-import '../widgets/file_list/file_list_dropdown_menu_item.dart';
-import '../helpers/alerts_helper.dart';
+import '../../resources/constants.dart';
+import '../../providers/main_provider.dart';
+import '../../widgets/file_list/file_list_item.dart';
+import '../../widgets/file_list/file_list_dropdown_menu_item.dart';
+import '../../helpers/alerts_helper.dart';
 
 class FileListScreen extends StatefulWidget {
   bool isFileBeingAdded = false;

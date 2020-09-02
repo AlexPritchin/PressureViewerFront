@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 
 import './resources/constants.dart';
 import './providers/main_provider.dart';
-import './screens/file_list_screen.dart';
-import './screens/file_details_screen.dart';
+import './screens/files/file_list_screen.dart';
+import './screens/files/file_details_screen.dart';
+import './screens/auth/login_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
           primaryColor: Color.fromRGBO(11, 130, 113, 1),
           textTheme: TextTheme(bodyText1: TextStyle(fontSize: 16)),
         ),
-        home: FileListScreen(),
+        // home: FileListScreen(),
+        home: LoginScreen(),
         routes: {
           ScreensRoutesNames.fileDetailsScreenRoute: (ctx) => FileDetailsScreen(),
         },
