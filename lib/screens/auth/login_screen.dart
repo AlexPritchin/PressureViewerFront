@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/auth/user.dart';
+import '../../services/data_services/validation_service.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -8,9 +9,28 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool _isLoading = false;
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
+  final User userData = User();
+
+  tryLogin(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+    var validationResult = _formKey.currentState.validate();
+    if (validationResult) {
+      _formKey.currentState.save();
+
+    }
+    setState(() {
+      _isLoading = false;
+    });
+    if (validationResult) {
+      // Navigator.of(context).pushNamed(routeName)
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               labelStyle: TextStyle(fontSize: 14)),
                           keyboardType: TextInputType.emailAddress,
                           focusNode: _emailFocusNode,
-                          
+                          validator: ValidationService.validateEmail,
+                          onSaved: (value) {
+                            userData.email = value;
+                          },
                         ),
                         TextFormField(
                           decoration: InputDecoration(
@@ -44,11 +67,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               labelStyle: TextStyle(fontSize: 14)),
                           obscureText: true,
                           focusNode: _passwordFocusNode,
-                          
+                          validator: ValidationService.validatePasswordNotEmpty,
+                          onSaved: (value) {
+                            userData.password = value;
+                          },
                         ),
                         SizedBox(
                           height: 20,
                         ),
+                        _isLoading ?
                         RaisedButton(
                           color: Color.fromRGBO(21, 140, 123, 1),
                           onPressed: () {},
@@ -56,7 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             'Sign in',
                             style: TextStyle(color: Colors.white),
                           ),
-                        ),
+                        ) : 
+                        CircularProgressIndicator(),
                         SizedBox(
                           height: 10,
                         ),
