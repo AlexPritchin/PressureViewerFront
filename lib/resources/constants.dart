@@ -11,6 +11,11 @@ class DBFileEntryTableFieldsNames {
   static const String fileName = 'fileName';
 }
 
+class DBUserTableFieldsNames {
+  static const String email = 'email';
+  static const String name = 'name';
+}
+
 class DBAtmPressuresTableFieldsNames {
   static const String date = 'date';
   static const String pressure = 'pressure';

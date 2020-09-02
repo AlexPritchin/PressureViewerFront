@@ -10,12 +10,11 @@ class AuthService {
   static Future<Map<String, dynamic>> login(Map<String, dynamic> userCredentials) async {
     var response = await http.post(WebServerUrls.loginFullPath,
         headers: jsonHeader, body: json.encode(userCredentials));
+    dynamic jsonBodyObject = json.decode(response.body);
     if (response.statusCode == 200) {
-      dynamic jsonBodyObject = json.decode(response.body);
-      var jsonBodyMap = ConverterHelper.getMapFromDynamic(jsonBodyObject);
-      return jsonBodyMap;
+      return ConverterHelper.getMapFromDynamic(jsonBodyObject['user']);
     }
-    return null;
+    return { 'message':  jsonBodyObject['message'] };
   }
 
 }

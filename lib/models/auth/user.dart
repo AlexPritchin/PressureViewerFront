@@ -1,3 +1,5 @@
+import '../../resources/constants.dart';
+
 class User {
   String id;
   String email;
@@ -5,7 +7,19 @@ class User {
   String password;
   String confirmPassword;
 
-  User([this.id, this.email, this.name, this.password, this.confirmPassword]);
+  User({this.id, this.email, this.name, this.password, this.confirmPassword});
+
+  User.fromMap(Map<String, dynamic> userMap) {
+    if(userMap[DBFileEntryTableFieldsNames.id] is String) {
+      id = userMap[DBFileEntryTableFieldsNames.id];
+    }
+    if(userMap[DBUserTableFieldsNames.email] is String) {
+      id = userMap[DBUserTableFieldsNames.email];
+    }
+    if(userMap[DBUserTableFieldsNames.name] is String) {
+      id = userMap[DBUserTableFieldsNames.name];
+    }
+  }
 
   Map<String, dynamic> toMapForLogin() {
     return {

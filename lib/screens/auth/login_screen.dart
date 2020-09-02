@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:connectivity/connectivity.dart';
 
 import '../../models/auth/user.dart';
 import '../../services/data_services/validation_service.dart';
+import '../../providers/auth_provider.dart';
+import '../../helpers/alerts_helper.dart';
+import '../../resources/constants.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -16,19 +21,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final User userData = User();
 
   tryLogin(BuildContext context) async {
+    _emailFocusNode.unfocus();
+    _passwordFocusNode.unfocus();
+    var networkConnectionExists = await Connectivity().checkConnectivity();
+    if (networkConnectionExists == ConnectivityResult.none) {
+      AlertsHelper.showSnackBarError(context, Errors.noNetworkError);
+      return;
+    }
     setState(() {
       _isLoading = true;
     });
     var validationResult = _formKey.currentState.validate();
+    var loginResult = '';
     if (validationResult) {
       _formKey.currentState.save();
-
+      loginResult = await Provider.of<AuthProvider>(context, listen: false)
+          .login(userData);
     }
     setState(() {
       _isLoading = false;
     });
-    if (validationResult) {
+    if (validationResult && loginResult == null) {
       // Navigator.of(context).pushNamed(routeName)
+    } else if (validationResult && loginResult != null) {
+      AlertsHelper.showSnackBarError(context, loginResult);
     }
   }
 
@@ -75,16 +91,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(
                           height: 20,
                         ),
-                        _isLoading ?
-                        RaisedButton(
-                          color: Color.fromRGBO(21, 140, 123, 1),
-                          onPressed: () {},
-                          child: Text(
-                            'Sign in',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ) : 
-                        CircularProgressIndicator(),
+                        _isLoading
+                            ? RaisedButton(
+                                color: Color.fromRGBO(21, 140, 123, 1),
+                                onPressed: () {
+                                  tryLogin(context);
+                                },
+                                child: Text(
+                                  'Sign in',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
+                            : CircularProgressIndicator(),
                         SizedBox(
                           height: 10,
                         ),

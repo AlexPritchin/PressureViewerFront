@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../models/auth/user.dart';
+import '../services/web_serices/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
   
-  User currentUserData = User();
+  User currentUserData;
 
-  Future<String> login(User userToLogin) {
-
+  Future<String> login(User userToLogin) async {
+    var userMap = await AuthService.login(userToLogin.toMapForLogin());
+    if (userMap['message'] != null) {
+      return userMap['message'];
+    }
+    currentUserData = User.fromMap(userMap);
+    return null;
   }
 
   Future<String> signup(User userToLogin) {
