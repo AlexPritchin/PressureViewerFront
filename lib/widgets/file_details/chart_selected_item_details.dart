@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pressure_viewer/widgets/file_details/chart_selected_item_details_measurement_item.dart';
 
-import '../../models/file_entry_measurement_item.dart';
+import '../../models/files/file_entry_measurement_item.dart';
 import '../../resources/constants.dart';
 import 'chart_selected_item_details_measurement_item.dart';
 

@@ -1,4 +1,4 @@
-import '../models/file_entry.dart';
+import '../models/files/file_entry.dart';
 
 class ConverterHelper {
   static List<FileEntry> getListOfFileEntry(

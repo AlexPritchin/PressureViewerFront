@@ -11,8 +11,8 @@ import 'package:csv/csv.dart';
 import '../services/web_serices/file_entries_service.dart';
 import '../helpers/converter_helper.dart';
 import '../resources/constants.dart';
-import '../models/file_entry.dart';
-import '../models/file_entry_measurement_item.dart';
+import '../models/files/file_entry.dart';
+import '../models/files/file_entry_measurement_item.dart';
 
 class MainProvider with ChangeNotifier {
   List<FileEntry> _fileEntries = [];

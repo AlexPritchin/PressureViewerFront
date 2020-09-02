@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:connectivity/connectivity.dart';
 
 import '../../resources/constants.dart';
-import '../../models/file_entry.dart';
+import '../../models/files/file_entry.dart';
 import '../../providers/main_provider.dart';
 import '../../helpers/alerts_helper.dart';
 

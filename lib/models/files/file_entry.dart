@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../resources/constants.dart';
+import '../../resources/constants.dart';
 
 class FileEntry {
   String id;
