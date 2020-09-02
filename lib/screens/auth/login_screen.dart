@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../models/auth/user.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -34,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               labelStyle: TextStyle(fontSize: 14)),
                           keyboardType: TextInputType.emailAddress,
                           focusNode: _emailFocusNode,
+                          
                         ),
                         TextFormField(
                           decoration: InputDecoration(
@@ -41,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               labelStyle: TextStyle(fontSize: 14)),
                           obscureText: true,
                           focusNode: _passwordFocusNode,
+                          
                         ),
                         SizedBox(
                           height: 20,
