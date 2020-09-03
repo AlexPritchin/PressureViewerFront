@@ -17,4 +17,10 @@ class AuthService {
     return { 'message':  jsonBodyObject['message'] };
   }
 
+  static Future<bool> signup(Map<String, dynamic> userCredentials) async {
+    var response = await http.put(WebServerUrls.signupFullPath,
+        headers: jsonHeader, body: json.encode(userCredentials));
+    return response.statusCode == 200;
+  }
+
 }
