@@ -16,7 +16,11 @@ class AuthProvider with ChangeNotifier {
     return null;
   }
 
-  Future<String> signup(User userToLogin) {
-    
+  Future<String> signup(User userToLogin) async {
+    var userMap = await AuthService.login(userToLogin.toMapForSignup());
+    if (userMap['message'] != null) {
+      return userMap['message'];
+    }
+    return null;
   }
 }
