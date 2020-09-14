@@ -14,5 +14,15 @@ class AlertsHelper {
         ),
       );
   }
+
+  static showSnackBarInfo(BuildContext context, String text) {
+    Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            text,
+          ),
+        ),
+      );
+  }
   
 }

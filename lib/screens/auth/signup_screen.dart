@@ -44,6 +44,8 @@ class _SignupScreenState extends State<SignupScreen> {
       _isLoading = false;
     });
     if (validationResult && signupResult == null) {
+      Navigator.of(context).pop();
+      AlertsHelper.showSnackBarInfo(context, 'User created successfully');
       // Navigator.of(context).pushNamed(routeName)
     } else if (validationResult && signupResult != null) {
       AlertsHelper.showSnackBarError(context, signupResult);
