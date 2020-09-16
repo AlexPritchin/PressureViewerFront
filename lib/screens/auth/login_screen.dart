@@ -52,6 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    if (MediaQuery.of(context).viewInsets.bottom == 0) {
+      _emailFocusNode.unfocus();
+      _passwordFocusNode.unfocus();
+    }
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: Stack(
@@ -93,7 +97,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 20,
                         ),
                         _isLoading
-                            ? RaisedButton(
+                            ? CircularProgressIndicator()
+                            : RaisedButton(
                                 color: Color.fromRGBO(21, 140, 123, 1),
                                 onPressed: () {
                                   tryLogin(context);
@@ -102,13 +107,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   'Sign in',
                                   style: TextStyle(color: Colors.white),
                                 ),
-                              )
-                            : CircularProgressIndicator(),
+                              ),
                         SizedBox(
                           height: 10,
                         ),
                         FlatButton(
                           onPressed: () {
+                            _emailFocusNode.unfocus();
+                            _passwordFocusNode.unfocus();
                             Navigator.of(context).pushNamed(
                 ScreensRoutesNames.signUpScreenRoute,);
                           },
@@ -124,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          Container(
+          if (MediaQuery.of(context).viewInsets.bottom == 0) Container(
             alignment: Alignment.topCenter,
             child: Padding(
               padding: const EdgeInsets.only(top: 60),

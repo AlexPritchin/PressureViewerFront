@@ -107,7 +107,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           height: 20,
                         ),
                         _isLoading
-                            ? RaisedButton(
+                            ? CircularProgressIndicator()
+                            : RaisedButton(
                                 color: Color.fromRGBO(21, 140, 123, 1),
                                 onPressed: () {
                                   trySignup(context);
@@ -116,8 +117,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   'Sign up',
                                   style: TextStyle(color: Colors.white),
                                 ),
-                              )
-                            : CircularProgressIndicator(),
+                              ),
                         SizedBox(
                           height: 10,
                         ),
@@ -137,7 +137,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
             ),
           ),
-          Container(
+          if (MediaQuery.of(context).viewInsets.bottom == 0) Container(
             alignment: Alignment.topCenter,
             child: Padding(
               padding: const EdgeInsets.only(top: 60),
