@@ -42,7 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = false;
     });
     if (validationResult && loginResult == null) {
-      // Navigator.of(context).pushNamed(routeName)
+      Navigator.of(context).pushNamed(
+                ScreensRoutesNames.fileListScreenRoute,);
     } else if (validationResult && loginResult != null) {
       AlertsHelper.showSnackBarError(context, loginResult);
     }
@@ -107,7 +108,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 10,
                         ),
                         FlatButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                ScreensRoutesNames.signUpScreenRoute,);
+                          },
                           child: Text(
                             'Don\'t have an account? Sign up',
                             style: TextStyle(color: Colors.blue),

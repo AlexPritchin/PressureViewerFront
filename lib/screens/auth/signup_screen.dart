@@ -122,7 +122,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           height: 10,
                         ),
                         FlatButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
                           child: Text(
                             'Already have an account? Sign in',
                             style: TextStyle(color: Colors.blue),

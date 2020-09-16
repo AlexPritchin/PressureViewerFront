@@ -6,6 +6,7 @@ import './providers/main_provider.dart';
 import './screens/files/file_list_screen.dart';
 import './screens/files/file_details_screen.dart';
 import './screens/auth/login_screen.dart';
+import './screens/auth/signup_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,7 +25,9 @@ class MyApp extends StatelessWidget {
         // home: FileListScreen(),
         home: LoginScreen(),
         routes: {
+          ScreensRoutesNames.fileListScreenRoute: (ctx) => FileListScreen(),
           ScreensRoutesNames.fileDetailsScreenRoute: (ctx) => FileDetailsScreen(),
+          ScreensRoutesNames.signUpScreenRoute: (ctx) => SignupScreen(),
         },
       ),
     );

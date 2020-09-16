@@ -27,7 +27,9 @@ class ScreensTitles {
 }
 
 class ScreensRoutesNames {
+  static const String fileListScreenRoute = '/file-list';
   static const String fileDetailsScreenRoute = '/file-details';
+  static const String signUpScreenRoute = '/signup';
 }
 
 const String csvFileExtension = 'csv';
