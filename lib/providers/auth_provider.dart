@@ -9,7 +9,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<String> login(User userToLogin) async {
     var userMap = await AuthService.login(userToLogin.toMapForLogin());
-    if (userMap['message'] != null) {
+    if (userMap != null && userMap['message'] != null) {
       return userMap['message'];
     }
     currentUserData = User.fromMap(userMap);
@@ -17,8 +17,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<String> signup(User userToLogin) async {
-    var userMap = await AuthService.login(userToLogin.toMapForSignup());
-    if (userMap['message'] != null) {
+    var userMap = await AuthService.signup(userToLogin.toMapForSignup());
+    if (userMap != null && userMap['message'] != null) {
       return userMap['message'];
     }
     return null;

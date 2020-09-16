@@ -21,7 +21,7 @@ class AuthService {
     var response = await http.put(WebServerUrls.signupFullPath,
         headers: jsonHeader, body: json.encode(userCredentials));
     dynamic jsonBodyObject = json.decode(response.body);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return null;
     }
     return { 'message':  jsonBodyObject['message'] };
