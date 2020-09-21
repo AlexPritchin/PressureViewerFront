@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'package:csv/csv.dart';
 
 //import '../services/data_services/db_service.dart';
-import '../services/web_serices/file_entries_service.dart';
+import '../services/web_services/file_entries_service.dart';
 import '../helpers/converter_helper.dart';
 import '../resources/constants.dart';
 import '../models/files/file_entry.dart';
