@@ -4,10 +4,12 @@ import 'package:http/http.dart' as http;
 
 import '../../resources/constants.dart';
 import '../../helpers/converter_helper.dart';
+import './authorized_requests_service.dart';
 
 class FileEntriesService {
   static Future<List<Map<String, dynamic>>> getFileEntries() async {
-    var response = await http.get(WebServerUrls.fileEntriesFullPath);
+    var request = http.Request(HTTPMethodNames.getMethodName, Uri(path: WebServerUrls.fileEntriesFullPath));
+    var response = await AuthorizedRequestsService.sendRequest(request);
     if (response.statusCode == 200) {
       List<dynamic> jsonBodyList = json.decode(response.body);
       var jsonBodyListOfMaps = jsonBodyList.map(ConverterHelper.getMapFromDynamic).toList();
@@ -19,8 +21,9 @@ class FileEntriesService {
 
   static Future<Map<String, dynamic>> addFileEntry(
       Map<String, dynamic> fileEntryToAdd) async {
-    var response = await http.post(WebServerUrls.fileEntriesFullPath,
-        headers: jsonHeader, body: json.encode(fileEntryToAdd));
+    var request = http.Request(HTTPMethodNames.post, Uri(path: WebServerUrls.fileEntriesFullPath));
+    request.body = json.encode(fileEntryToAdd);
+    var response = await AuthorizedRequestsService.sendRequest(request);
     if (response.statusCode == 201) {
       return json.decode(response.body)['fileEntry'];
     }
@@ -28,8 +31,8 @@ class FileEntriesService {
   }
 
   static Future<bool> deleteFileEntry({String fileEntryId}) async {
-    var response =
-        await http.delete(WebServerUrls.fileEntriesFullPath + '/$fileEntryId');
+    var request = http.Request(HTTPMethodNames.delete, Uri(path: WebServerUrls.fileEntriesFullPath + '/$fileEntryId'));
+    var response = await AuthorizedRequestsService.sendRequest(request);
     return response.statusCode == 200;
   }
 }

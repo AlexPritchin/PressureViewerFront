@@ -66,7 +66,14 @@ class FileDetailsChartDetailsTitles {
   static const String heartRateTitle = 'Heart rate:';
 }
 
-const jsonHeader = {"Content-Type": "application/json"};
+class HTTPRequestHeaders {
+  static const String contentHeaderName = 'Content-Type';
+  static const String contentHeaderValueJson = 'application/json';
+  static const String authorizationHeaderName = 'Authorization';
+  static Map<String, String> get singleJsonContentHeader {
+    return {contentHeaderName: contentHeaderValueJson};
+  }
+}
 
 const serverMainUrl = 'http://10.0.2.2:8000';
 
@@ -74,8 +81,10 @@ class WebServerUrls {
   static const String userPath = '/user';
   static const String signupPath = '/signup';
   static const String loginPath = '/signin';
+  static const String refreshTokenPath = '/refreshToken';
   static const String signupFullPath = serverMainUrl + userPath + signupPath;
   static const String loginFullPath = serverMainUrl + userPath + loginPath;
+  static const String refreshTokenFullPath = serverMainUrl + userPath + refreshTokenPath;
   static const String filesPath = '/files';
   static const String fileEntriesPath = '/file-entries';
   static const String fileEntriesFullPath = serverMainUrl + filesPath + fileEntriesPath;
@@ -101,4 +110,10 @@ class DropdownMenuTitles {
   static const String sort = 'Sort by date';
   static const String ascending = 'Ascending';
   static const String descending = 'Descending';
+}
+
+class HTTPMethodNames {
+  static const String getMethodName = 'GET';
+  static const String post = 'POST';
+  static const String delete = 'DELETE';
 }
