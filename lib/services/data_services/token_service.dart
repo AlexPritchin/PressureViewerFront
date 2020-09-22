@@ -4,6 +4,10 @@ import 'package:encrypt/encrypt.dart';
 class TokenService {
   static String userToken = '';
 
+  static String get userTokenStringForHeader {
+    return 'bearer ' + userToken;
+  }
+
   static Future<bool> setRefreshToken(String refreshToken) async {
     final secretKey = Key.fromUtf8('somesupersecretkey');
     final initVector = IV.fromUtf8('somesupersecretinitvector');
