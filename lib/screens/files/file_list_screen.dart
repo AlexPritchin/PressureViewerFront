@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity/connectivity.dart';
 
 import '../../resources/constants.dart';
 import '../../providers/main_provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../widgets/file_list/file_list_item.dart';
 import '../../widgets/file_list/file_list_dropdown_menu_item.dart';
 import '../../helpers/alerts_helper.dart';
@@ -59,8 +61,9 @@ class _FileListScreenState extends State<FileListScreen> {
     setState(() {
       widget.isFileBeingAdded = true;
     });
-    var isFileAdded = await Provider.of<MainProvider>(mainContext, listen: false)
-        .addFile(fileToAdd: pickedFile);
+    var isFileAdded =
+        await Provider.of<MainProvider>(mainContext, listen: false)
+            .addFile(fileToAdd: pickedFile);
     setState(() {
       widget.isFileBeingAdded = false;
     });
@@ -89,124 +92,148 @@ class _FileListScreenState extends State<FileListScreen> {
     ScrollController scrollToAddedItemScrollControler = ScrollController(
         initialScrollOffset: 70 * mainProvid.addedFileEntryIndex.toDouble());
     return Scaffold(
-        appBar: AppBar(
-          title: Text(ScreensTitles.fileListScreenTitle),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                DropdownButton(
-                  underline: Container(),
-                  icon: Icon(
-                    Icons.sort,
-                    color: Colors.white,
-                  ),
-                  items: [
-                    DropdownMenuItem(
-                      child: Text(
-                        DropdownMenuTitles.sort,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      value: 'title',
-                    ),
-                    DropdownMenuItem(
-                      child: FileListDropdownMenuItem(
-                        DropdownMenuTitles.ascending,
-                        widget.currentDateSortOrder == SortOrderType.Ascending,
-                      ),
-                      value: 'Asc',
-                    ),
-                    DropdownMenuItem(
-                      child: FileListDropdownMenuItem(
-                        DropdownMenuTitles.descending,
-                        widget.currentDateSortOrder == SortOrderType.Descending,
-                      ),
-                      value: 'Desc',
-                    ),
-                  ],
-                  onChanged: (itemIdentifier) {
-                    if (itemIdentifier == 'Asc') {
-                      sortFileEntries(context, SortOrderType.Ascending);
-                    } else if (itemIdentifier == 'Desc') {
-                      sortFileEntries(context, SortOrderType.Descending);
-                    }
-                  },
-                ),
-              ],
-            ),
-            IconButton(
+      appBar: AppBar(
+        title: Text(ScreensTitles.fileListScreenTitle),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              DropdownButton(
+                underline: Container(),
                 icon: Icon(
-                  Icons.add,
+                  Icons.sort,
                   color: Colors.white,
                 ),
-                onPressed: () {
-                  pickFile(context);
-                })
+                items: [
+                  DropdownMenuItem(
+                    child: Text(
+                      DropdownMenuTitles.sort,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    value: 'title',
+                  ),
+                  DropdownMenuItem(
+                    child: FileListDropdownMenuItem(
+                      DropdownMenuTitles.ascending,
+                      widget.currentDateSortOrder == SortOrderType.Ascending,
+                    ),
+                    value: 'Asc',
+                  ),
+                  DropdownMenuItem(
+                    child: FileListDropdownMenuItem(
+                      DropdownMenuTitles.descending,
+                      widget.currentDateSortOrder == SortOrderType.Descending,
+                    ),
+                    value: 'Desc',
+                  ),
+                ],
+                onChanged: (itemIdentifier) {
+                  if (itemIdentifier == 'Asc') {
+                    sortFileEntries(context, SortOrderType.Ascending);
+                  } else if (itemIdentifier == 'Desc') {
+                    sortFileEntries(context, SortOrderType.Descending);
+                  }
+                },
+              ),
+            ],
+          ),
+          IconButton(
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                pickFile(context);
+              })
+        ],
+      ),
+      body: widget.isFileBeingAdded
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : FutureBuilder(
+              future: Connectivity().checkConnectivity(),
+              builder: (ctx, snapshot) => snapshot.connectionState ==
+                      ConnectionState.waiting
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : snapshot.data == null
+                      ? Center(
+                          child: Text(
+                            Errors.unknownError,
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        )
+                      : (snapshot.data as ConnectivityResult) ==
+                              ConnectivityResult.none
+                          ? Center(
+                              child: Text(
+                                Errors.noNetworkError,
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            )
+                          : FutureBuilder(
+                              future: mainProvid.fetchFileEntries(),
+                              builder: (ctx, snapshot) => snapshot
+                                          .connectionState ==
+                                      ConnectionState.waiting
+                                  ? Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : (snapshot.data != null &&
+                                          snapshot.data.length > 0)
+                                      ? ListView.builder(
+                                          itemBuilder: (ctx, elementIndex) =>
+                                              FileListItem(
+                                            id: snapshot.data[elementIndex].id,
+                                          ),
+                                          itemCount: snapshot.data.length,
+                                          controller:
+                                              scrollToAddedItemScrollControler,
+                                        )
+                                      : Center(
+                                          child: Text(
+                                            snapshot.data != null
+                                                ? Messages
+                                                    .fileListNoFilesMessage
+                                                : Errors.unknownError,
+                                            style: TextStyle(
+                                                color: snapshot.data != null
+                                                    ? Colors.black
+                                                    : Colors.red),
+                                          ),
+                                        ),
+                            ),
+            ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              height: 88.0,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: Text(
+                  Provider.of<AuthProvider>(context, listen: false).currentUserEmail,
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('My profile'),
+              onTap: () {},
+            ),
           ],
         ),
-        body: widget.isFileBeingAdded
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : FutureBuilder(
-                future: Connectivity().checkConnectivity(),
-                builder: (ctx, snapshot) => snapshot.connectionState ==
-                        ConnectionState.waiting
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : snapshot.data == null
-                        ? Center(
-                            child: Text(
-                              Errors.unknownError,
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          )
-                        : (snapshot.data as ConnectivityResult) ==
-                                ConnectivityResult.none
-                            ? Center(
-                                child: Text(
-                                  Errors.noNetworkError,
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              )
-                            : FutureBuilder(
-                                future: mainProvid.fetchFileEntries(),
-                                builder: (ctx, snapshot) => snapshot
-                                            .connectionState ==
-                                        ConnectionState.waiting
-                                    ? Center(
-                                        child: CircularProgressIndicator(),
-                                      )
-                                    : (snapshot.data != null &&
-                                            snapshot.data.length > 0)
-                                        ? ListView.builder(
-                                            itemBuilder: (ctx, elementIndex) =>
-                                                FileListItem(
-                                              id: snapshot
-                                                  .data[elementIndex].id,
-                                            ),
-                                            itemCount: snapshot.data.length,
-                                            controller:
-                                                scrollToAddedItemScrollControler,
-                                          )
-                                        : Center(
-                                            child: Text(
-                                              snapshot.data != null
-                                                  ? Messages
-                                                      .fileListNoFilesMessage
-                                                  : Errors.unknownError,
-                                              style: TextStyle(
-                                                  color: snapshot.data != null
-                                                      ? Colors.black
-                                                      : Colors.red),
-                                            ),
-                                          ),
-                              ),
-              ));
+      ),
+    );
   }
 }

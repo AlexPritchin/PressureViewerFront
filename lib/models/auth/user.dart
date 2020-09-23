@@ -14,10 +14,10 @@ class User {
       id = userMap[DBFileEntryTableFieldsNames.id];
     }
     if(userMap[DBUserTableFieldsNames.email] is String) {
-      id = userMap[DBUserTableFieldsNames.email];
+      email = userMap[DBUserTableFieldsNames.email];
     }
     if(userMap[DBUserTableFieldsNames.name] is String) {
-      id = userMap[DBUserTableFieldsNames.name];
+      name = userMap[DBUserTableFieldsNames.name];
     }
   }
 
