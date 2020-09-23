@@ -8,7 +8,7 @@ import './authorized_requests_service.dart';
 
 class FileEntriesService {
   static Future<List<Map<String, dynamic>>> getFileEntries() async {
-    var request = http.Request(HTTPMethodNames.getMethodName, Uri(path: WebServerUrls.fileEntriesFullPath));
+    var request = http.Request(HTTPMethodNames.getMethodName, Uri.tryParse(WebServerUrls.fileEntriesFullPath));
     var response = await AuthorizedRequestsService.sendRequest(request);
     if (response.statusCode == 200) {
       List<dynamic> jsonBodyList = json.decode(response.body);
@@ -21,7 +21,7 @@ class FileEntriesService {
 
   static Future<Map<String, dynamic>> addFileEntry(
       Map<String, dynamic> fileEntryToAdd) async {
-    var request = http.Request(HTTPMethodNames.post, Uri(path: WebServerUrls.fileEntriesFullPath));
+    var request = http.Request(HTTPMethodNames.post, Uri.tryParse(WebServerUrls.fileEntriesFullPath));
     request.body = json.encode(fileEntryToAdd);
     var response = await AuthorizedRequestsService.sendRequest(request);
     if (response.statusCode == 201) {
@@ -31,7 +31,7 @@ class FileEntriesService {
   }
 
   static Future<bool> deleteFileEntry({String fileEntryId}) async {
-    var request = http.Request(HTTPMethodNames.delete, Uri(path: WebServerUrls.fileEntriesFullPath + '/$fileEntryId'));
+    var request = http.Request(HTTPMethodNames.delete, Uri.tryParse(WebServerUrls.fileEntriesFullPath + '/$fileEntryId'));
     var response = await AuthorizedRequestsService.sendRequest(request);
     return response.statusCode == 200;
   }
