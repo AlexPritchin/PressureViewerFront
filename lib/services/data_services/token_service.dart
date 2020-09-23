@@ -9,8 +9,8 @@ class TokenService {
   }
 
   static Future<bool> setRefreshToken(String refreshToken) async {
-    final secretKey = Key.fromUtf8('somesupersecretkey');
-    final initVector = IV.fromUtf8('somesupersecretinitvector');
+    final secretKey = Key.fromUtf8('someverysecretsk');
+    final initVector = IV.fromUtf8('someverysecretiv');
     final encrypter = Encrypter(AES(secretKey));
     final encryptedRefreshToken = encrypter.encrypt(refreshToken, iv: initVector);
     final sharedPrefs = await SharedPreferences.getInstance();
@@ -20,8 +20,8 @@ class TokenService {
   static Future<String> getRefreshToken() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     final base64RefreshToken = sharedPrefs.getString('userRefreshToken');
-    final secretKey = Key.fromUtf8('somesupersecretkey');
-    final initVector = IV.fromUtf8('somesupersecretinitvector');
+    final secretKey = Key.fromUtf8('someverysecretsk');
+    final initVector = IV.fromUtf8('someverysecretiv');
     final encrypter = Encrypter(AES(secretKey));
     final encryptedRefreshToken = Encrypted.fromBase64(base64RefreshToken);
     return encrypter.decrypt(encryptedRefreshToken, iv: initVector);
