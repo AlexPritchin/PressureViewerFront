@@ -30,6 +30,7 @@ class ScreensRoutesNames {
   static const String fileListScreenRoute = '/file-list';
   static const String fileDetailsScreenRoute = '/file-details';
   static const String signUpScreenRoute = '/signup';
+  static const String userProfileScreenRoute = '/user-profile';
 }
 
 const String csvFileExtension = 'csv';

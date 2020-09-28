@@ -8,6 +8,7 @@ import './screens/files/file_list_screen.dart';
 import './screens/files/file_details_screen.dart';
 import './screens/auth/login_screen.dart';
 import './screens/auth/signup_screen.dart';
+import './screens/user/user_profile_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
             ScreensRoutesNames.fileDetailsScreenRoute: (ctx) =>
                 FileDetailsScreen(),
             ScreensRoutesNames.signUpScreenRoute: (ctx) => SignupScreen(),
+            ScreensRoutesNames.userProfileScreenRoute: (ctx) => UserProfileScreen(),
           },
         ),
       ),

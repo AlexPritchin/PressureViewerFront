@@ -229,7 +229,10 @@ class _FileListScreenState extends State<FileListScreen> {
             ListTile(
               leading: Icon(Icons.person),
               title: Text('My profile'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(ScreensRoutesNames.userProfileScreenRoute);
+              },
             ),
           ],
         ),
