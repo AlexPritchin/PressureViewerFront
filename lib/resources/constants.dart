@@ -79,13 +79,16 @@ class HTTPRequestHeaders {
 const serverMainUrl = 'http://10.0.2.2:8000';
 
 class WebServerUrls {
+  static const String authPath = '/auth';
   static const String userPath = '/user';
   static const String signupPath = '/signup';
   static const String loginPath = '/signin';
   static const String refreshTokenPath = '/refreshToken';
-  static const String signupFullPath = serverMainUrl + userPath + signupPath;
-  static const String loginFullPath = serverMainUrl + userPath + loginPath;
-  static const String refreshTokenFullPath = serverMainUrl + userPath + refreshTokenPath;
+  static const String dataPath = '/data';
+  static const String signupFullPath = serverMainUrl + authPath + signupPath;
+  static const String loginFullPath = serverMainUrl + authPath + loginPath;
+  static const String refreshTokenFullPath = serverMainUrl + authPath + refreshTokenPath;
+  static const String userDataFullPath = serverMainUrl + userPath + dataPath;
   static const String filesPath = '/files';
   static const String fileEntriesPath = '/file-entries';
   static const String fileEntriesFullPath = serverMainUrl + filesPath + fileEntriesPath;
