@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import './resources/constants.dart';
@@ -9,11 +10,13 @@ import './screens/files/file_details_screen.dart';
 import './screens/auth/login_screen.dart';
 import './screens/auth/signup_screen.dart';
 import './screens/user/user_profile_screen.dart';
+import './screens/common/spalsh_screen.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -29,13 +32,21 @@ class MyApp extends StatelessWidget {
             textTheme: TextTheme(bodyText1: TextStyle(fontSize: 16)),
           ),
           // home: FileListScreen(),
-          home: LoginScreen(),
+          // home: LoginScreen(),
+          home: FutureBuilder(
+              future: Provider.of<AuthProvider>(context, listen: false)
+                  .tryReLogin(),
+              builder: (ctx, snapshot) =>
+                  snapshot.connectionState == ConnectionState.waiting
+                      ? SplashScreen()
+                      : (snapshot.data ? FileListScreen() : LoginScreen())),
           routes: {
             ScreensRoutesNames.fileListScreenRoute: (ctx) => FileListScreen(),
             ScreensRoutesNames.fileDetailsScreenRoute: (ctx) =>
                 FileDetailsScreen(),
             ScreensRoutesNames.signUpScreenRoute: (ctx) => SignupScreen(),
-            ScreensRoutesNames.userProfileScreenRoute: (ctx) => UserProfileScreen(),
+            ScreensRoutesNames.userProfileScreenRoute: (ctx) =>
+                UserProfileScreen(),
           },
         ),
       ),

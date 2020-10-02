@@ -6,7 +6,7 @@ import '../../services/data_services/token_service.dart';
 
 class AuthorizedRequestsService {
 
-  static Future<http.StreamedResponse> _sendRefreshToken() async {
+  static Future<http.StreamedResponse> sendRefreshToken() async {
     final http.Request refreshTokenRequest = http.Request(HTTPMethodNames.post, Uri.tryParse(WebServerUrls.refreshTokenFullPath));
     refreshTokenRequest.headers[HTTPRequestHeaders.contentHeaderName] = HTTPRequestHeaders.contentHeaderValueJson;
     final currentRefreshToken = await TokenService.getRefreshToken();
@@ -28,7 +28,7 @@ class AuthorizedRequestsService {
     var mainRequestResponse = await requestToSend.send();
     var resultResponseBody = await mainRequestResponse.stream.bytesToString();
     if (mainRequestResponse.statusCode == 401) {
-      final refreshTokenRequestResponse = await _sendRefreshToken();
+      final refreshTokenRequestResponse = await sendRefreshToken();
       if (refreshTokenRequestResponse.statusCode != 200) {
         resultResponseBody = await refreshTokenRequestResponse.stream.bytesToString();
         return http.Response(resultResponseBody, refreshTokenRequestResponse.statusCode);

@@ -9,7 +9,7 @@ class AuthProvider with ChangeNotifier {
   User _currentUserData;
 
   String get currentUserEmail {
-    return _currentUserData.email;
+    return _currentUserData.email ?? '';
   }
 
   Future<String> login(User userToLogin) async {
@@ -35,5 +35,14 @@ class AuthProvider with ChangeNotifier {
       return userMap['message'];
     }
     return null;
+  }
+
+  Future<bool> tryReLogin() async {
+    final reloginResult = await AuthService.tryReLogin();
+    if (reloginResult) {
+      var userMap = await AuthService.getCurrentUserData();
+      _currentUserData = User.fromMap(userMap);
+    }
+    return reloginResult;
   }
 }
