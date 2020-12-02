@@ -5,12 +5,6 @@ import '../services/web_services/auth_service.dart';
 import '../services/data_services/token_service.dart';
 
 class AuthProvider with ChangeNotifier {
-  
-  User _currentUserData;
-
-  String get currentUserEmail {
-    return _currentUserData.email ?? '';
-  }
 
   Future<String> login(User userToLogin) async {
     var userMap = await AuthService.login(userToLogin.toMapForLogin());
@@ -25,7 +19,7 @@ class AuthProvider with ChangeNotifier {
       return 'An error occured. Please try again.';
     }
     TokenService.userToken = userMap['token'];
-    _currentUserData = User.fromMap(userMap);
+    //_currentUserData = User.fromMap(userMap);
     return null;
   }
 
@@ -39,10 +33,6 @@ class AuthProvider with ChangeNotifier {
 
   Future<bool> tryReLogin() async {
     final reloginResult = await AuthService.tryReLogin();
-    if (reloginResult) {
-      var userMap = await AuthService.getCurrentUserData();
-      _currentUserData = User.fromMap(userMap);
-    }
     return reloginResult;
   }
 }

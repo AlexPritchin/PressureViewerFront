@@ -12,7 +12,7 @@ import 'package:connectivity/connectivity.dart';
 
 import '../../resources/constants.dart';
 import '../../providers/main_provider.dart';
-import '../../providers/auth_provider.dart';
+import '../../providers/user_provider.dart';
 import '../../widgets/file_list/file_list_item.dart';
 import '../../widgets/file_list/file_list_dropdown_menu_item.dart';
 import '../../helpers/alerts_helper.dart';
@@ -220,9 +220,18 @@ class _FileListScreenState extends State<FileListScreen> {
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                 ),
-                child: Text(
-                  Provider.of<AuthProvider>(context, listen: false).currentUserEmail,
-                  style: TextStyle(color: Colors.white),
+                child: FutureBuilder(
+                  future: Provider.of<UserProvider>(context, listen: false)
+                      .getCurrentUserEmail(),
+                  builder: (ctx, snapshot) =>
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Text(
+                              snapshot.data ?? '',
+                              style: TextStyle(color: Colors.white),
+                            ),
                 ),
               ),
             ),
@@ -231,7 +240,8 @@ class _FileListScreenState extends State<FileListScreen> {
               title: Text('My profile'),
               onTap: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushNamed(ScreensRoutesNames.userProfileScreenRoute);
+                Navigator.of(context)
+                    .pushNamed(ScreensRoutesNames.userProfileScreenRoute);
               },
             ),
           ],

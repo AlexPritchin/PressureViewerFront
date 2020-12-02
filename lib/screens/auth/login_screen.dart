@@ -74,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: [
                           TextFormField(
+                            initialValue: 'theusermail@mail.com',
                             decoration: InputDecoration(
                                 labelText: 'E-mail',
                                 labelStyle: TextStyle(fontSize: 14)),
@@ -85,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                           TextFormField(
+                            initialValue: 'qazxsw',
                             decoration: InputDecoration(
                                 labelText: 'Password',
                                 labelStyle: TextStyle(fontSize: 14)),

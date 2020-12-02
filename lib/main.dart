@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import './resources/constants.dart';
 import './providers/main_provider.dart';
 import './providers/auth_provider.dart';
+import './providers/user_provider.dart';
 import './screens/files/file_list_screen.dart';
 import './screens/files/file_details_screen.dart';
 import './screens/auth/login_screen.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: AuthProvider()),
         ChangeNotifierProvider.value(value: MainProvider()),
+        ChangeNotifierProvider.value(value: UserProvider()),
       ],
       child: Consumer<AuthProvider>(
         builder: (context, authProvider, _) => MaterialApp(
