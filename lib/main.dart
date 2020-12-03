@@ -49,6 +49,8 @@ class MyApp extends StatelessWidget {
             ScreensRoutesNames.signUpScreenRoute: (ctx) => SignupScreen(),
             ScreensRoutesNames.userProfileScreenRoute: (ctx) =>
                 UserProfileScreen(),
+            ScreensRoutesNames.loginScreenRoute: (ctx) =>
+                LoginScreen(),
           },
         ),
       ),

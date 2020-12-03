@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/user_provider.dart';
+import '../../services/data_services/token_service.dart';
+import '../../resources/constants.dart';
 
 class UserProfileScreen extends StatelessWidget {
   @override
@@ -43,20 +45,34 @@ class UserProfileScreen extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: RaisedButton(
-                  child: Text('Change password'),
-                  onPressed: () {},
-                ),
-              ),
+              // FractionallySizedBox(
+              //   widthFactor: 0.9,
+              //   child: RaisedButton(
+              //     color: Color.fromRGBO(21, 140, 123, 1),
+              //     child: Text(
+              //       'Change password',
+              //       style: TextStyle(color: Colors.white),
+              //     ),
+              //     onPressed: () {},
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: FractionallySizedBox(
                   widthFactor: 0.9,
                   child: RaisedButton(
-                    child: Text('Logout'),
-                    onPressed: () {},
+                    color: Color.fromRGBO(21, 140, 123, 1),
+                    child: Text(
+                      'Logout',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      TokenService.userToken = '';
+                      TokenService.clearRefreshToken();
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          ScreensRoutesNames.loginScreenRoute,
+                          (route) => false);
+                    },
                   ),
                 ),
               ),

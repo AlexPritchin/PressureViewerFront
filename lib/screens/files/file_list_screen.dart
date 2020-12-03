@@ -94,6 +94,7 @@ class _FileListScreenState extends State<FileListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(ScreensTitles.fileListScreenTitle),
+        titleSpacing: 0.0,
         actions: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
