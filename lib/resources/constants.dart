@@ -66,6 +66,7 @@ class FileDetailsChartDetailsTitles {
   static const String systoliticPressureTitle = 'Systolitic pressure:';
   static const String diastoliticPressureTitle = 'Diastolitic pressure:';
   static const String heartRateTitle = 'Heart rate:';
+  static const String atmosphericPressureTitle = 'Atmospheric pressure:';
 }
 
 class HTTPRequestHeaders {
@@ -94,6 +95,8 @@ class WebServerUrls {
   static const String fileEntriesPath = '/file-entries';
   static const String fileEntriesFullPath = serverMainUrl + filesPath + fileEntriesPath;
 }
+
+const weatherApiUrl = 'https://community-open-weather-map.p.rapidapi.com/onecall/timemachine';
 
 class Messages {
   static const String fileListNoFilesMessage = 'No files found. Press "+" button to add a statistics file.';

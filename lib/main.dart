@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart';
 
 import './resources/constants.dart';
 import './providers/main_provider.dart';
@@ -13,7 +16,10 @@ import './screens/auth/signup_screen.dart';
 import './screens/user/user_profile_screen.dart';
 import './screens/common/spalsh_screen.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  HttpOverrides.global = new AllCertificatesHttpOverrides();
+  runApp(MyApp());
+} 
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -55,5 +61,13 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AllCertificatesHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+    ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }

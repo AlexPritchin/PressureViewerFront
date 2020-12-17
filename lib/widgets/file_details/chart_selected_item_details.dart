@@ -20,6 +20,7 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
   var _currentSelectedSystoliticPressure = '';
   var _currentSelectedDiastoliticPressure = '';
   var _currentSelectedHeartRate = '';
+  DateTime _currentSelectedDate = null;
 
   changeDataWithItem(FileEntryMeasurementItem measurementItem) {
     setState(() {
@@ -29,6 +30,7 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
       _currentSelectedDiastoliticPressure =
           measurementItem.diastoliticPressureString;
       _currentSelectedHeartRate = measurementItem.heartRateString;
+      _currentSelectedDate = measurementItem.measurementDate;
     });
   }
 
@@ -48,6 +50,9 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
       if (_currentSelectedHeartRate == '')
         _currentSelectedHeartRate =
             widget.initialMeasurementItem.heartRateString;
+      if (_currentSelectedDate == null)
+        _currentSelectedDate =
+            widget.initialMeasurementItem.measurementDate;
       widget.initialMeasurementItem = null;
     }
     return Expanded(
@@ -74,6 +79,13 @@ class _ChartSelectedItemDetailsState extends State<ChartSelectedItemDetails> {
             itemLabel: FileDetailsChartDetailsTitles.heartRateTitle,
             itemValue: _currentSelectedHeartRate,
           ),
+          if (_currentSelectedDate != null)
+            ChartSelectedItemDetailsMeasurementItem(
+              currentTextStyle: textStyleForThisWidget,
+              itemLabel: FileDetailsChartDetailsTitles.atmosphericPressureTitle,
+              itemValue: '',
+              itemDate: _currentSelectedDate,
+            ),
         ],
       ),
     );

@@ -9,6 +9,7 @@ import 'package:csv/csv.dart';
 
 //import '../services/data_services/db_service.dart';
 import '../services/web_services/file_entries_service.dart';
+import '../services/web_services/weather_service.dart';
 import '../helpers/converter_helper.dart';
 import '../resources/constants.dart';
 import '../models/files/file_entry.dart';
@@ -168,5 +169,18 @@ class MainProvider with ChangeNotifier {
         await pathProvider.getApplicationDocumentsDirectory();
     return path.join(
         documentsDirectoryPath.path, '$fileName.$csvFileExtension');
+  }
+
+  Future<String> getAtmosphericPressureForDate(DateTime dateToGetPressureFor) async {
+    int unixTimeForDateParam = (dateToGetPressureFor.millisecondsSinceEpoch / 1000).floor();
+    var weatherData = await WeatherService.getWeatherDataForUnixTime(unixTimeForDateParam);
+    if (weatherData == null) {
+      return 'N/A';
+    }
+    int atmosphericPressure = weatherData['current']['pressure'];
+    if (atmosphericPressure == null) {
+      return 'N/A';
+    }
+    return (atmosphericPressure * 0.75).round().toString();
   }
 }
